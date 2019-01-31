@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.259,=Y:\DPM Neftrmash\Common Units\uDM.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.739,Y:\DPM Neftrmash\Source\Phenix CORE\uTypes.pas=Y:\DPM Neftrmash\Source\PDM Config\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.954,Y:\DPM Neftrmash\Source\PDM Config\Programs\uProgManager.pas=Y:\DPM Neftrmash\Source\PDM Config\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.341,C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.fmx=Y:\DPM Neftrmash\PDM Config\Source\uMain.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.954,=Y:\DPM Neftrmash\Source\PDM Config\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.236,Y:\DPM Neftrmash\PDM Config\Source\Unit1.fmx=Y:\DPM Neftrmash\PDM Config\Source\MailList\uCheckCondition.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.557,Y:\DPM Neftrmash\PDM Config\Source\Unit1.fmx=Y:\DPM Neftrmash\PDM Config\Source\uConfigHTMLPreview.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.256,=Y:\DPM Neftrmash\Common Units\udbUtils.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.057,=Y:\DPM Neftrmash\Common Units\uAdminPanel.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.343,=Y:\DPM Neftrmash\PDM Config\Source\uConstants.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.496,=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.341,C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas=Y:\DPM Neftrmash\PDM Config\Source\uMain.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.659,=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.972,=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.557,Y:\DPM Neftrmash\PDM Config\Source\Unit1.pas=Y:\DPM Neftrmash\PDM Config\Source\uConfigHTMLPreview.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.501,Y:\DPM Neftrmash\PDM Config\Source\Unit1.pas=Y:\DPM Neftrmash\Common Units\uLog.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.798,=Y:\DPM Neftrmash\PDM Config\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.291,=Y:\DPM Neftrmash\PDM Config\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.317,Y:\DPM Neftrmash\PDM Config\Source\Unit1.pas=Y:\DPM Neftrmash\Common Units\ucCore.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.552,=Y:\DPM Neftrmash\PDM Config\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.594,=Y:\DPM Neftrmash\PDM Config\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.889,=Y:\DPM Neftrmash\Source\PDM Config\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.074,=Y:\DPM Neftrmash\Source\PDM Config\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.668,Y:\DPM Neftrmash\Source\PDM Config\Unit1.pas=Y:\DPM Neftrmash\Source\Phenix CORE\ucFMXTools.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.330,=Y:\DPM Neftrmash\PDM Config\Source\MailList\uConfigHTMLPreview.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.236,Y:\DPM Neftrmash\PDM Config\Source\Unit1.pas=Y:\DPM Neftrmash\PDM Config\Source\MailList\uCheckCondition.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.009,C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Project2.dproj=Y:\DPM Neftrmash\PDM Config\Source\PDMConfig.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.476,Y:\DPM Neftrmash\Source\Phenix CORE\uPhenixTypes.pas=Y:\DPM Neftrmash\Source\Phenix CORE\uTypes.pas</Transaction>
+  </Transactions>
+</BorlandProject>

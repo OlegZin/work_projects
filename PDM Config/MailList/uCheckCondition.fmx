@@ -1,0 +1,46 @@
+object fCheckCondition: TfCheckCondition
+  Left = 0
+  Top = 0
+  Caption = 'User select preview'
+  ClientHeight = 339
+  ClientWidth = 489
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnClose = FormClose
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object mSQL: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Client
+    Size.Width = 307.000000000000000000
+    Size.Height = 339.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 303.000000000000000000
+    Viewport.Height = 335.000000000000000000
+  end
+  object lbUserList: TListBox
+    Align = Left
+    Size.Width = 177.000000000000000000
+    Size.Height = 339.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    DisableFocusEffect = True
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    Viewport.Width = 173.000000000000000000
+    Viewport.Height = 335.000000000000000000
+  end
+  object Splitter1: TSplitter
+    Align = Left
+    Cursor = crHSplit
+    MinSize = 20.000000000000000000
+    Position.X = 177.000000000000000000
+    Size.Width = 5.000000000000000000
+    Size.Height = 339.000000000000000000
+    Size.PlatformDefault = False
+  end
+end
