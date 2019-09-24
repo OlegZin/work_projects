@@ -3,11 +3,13 @@ unit ucListSearch;
 interface
 
 uses
-    Controls, Types
+    VCL.Controls, Types
     ,uListSearch    // включить в пути поиска проекта путь до данного модуля. например:
                     // Y:\DPM Neftrmash\Source\Phenix CORE\VCL ListSearch
     ,Math
     ,VCL.Forms
+    ,Vcl.StdCtrls
+    ,System.StrUtils
     ;
 type
 
@@ -27,6 +29,9 @@ type
                 : string;
 
         DefValue : Variant;
+
+        procedure CustomData(value: string);
+
     end;
 
 implementation
@@ -36,36 +41,17 @@ uses
 
 { TListSearch }
 
-function TListSearch.Execute: boolean;
+procedure TListSearch.CustomData(value: string);
+var
+    currSQL: string;
 begin
-    result := false;
 
-    // проверяем инициализацию
-    if not Assigned(Parent) or (SQL = '') then exit;
+    currSQL := ReplaceStr( SQL, '#VALUE#', value );
 
-    SelText := '';
-    SelData := 0;
-
-{   получаем данные.
-    подразумевается, что запрос возвращает только два поля
-    первое - отображается в списке, второе - id соответствующей записи в базе }
-    if not dmOQ(SQL) then exit;
-
-    // создаем и инициализируем форму
-    if not Assigned( fListSearch ) then
-       fListSearch := TfListSearch.Create(nil);
-
-    // располагаем под целевым компонентом
-    fListSearch.Width := parent.Width;//max(parent.Width, 300);
-    fListSearch.Top := parent.ClientToScreen(Point(0,0)).Y + parent.Height;
-    fListSearch.Left := parent.ClientToScreen(Point(0,0)).X;
-
-    if fListSearch.Top + fListSearch.Height > Screen.Height
-    then
-        fListSearch.Top := parent.ClientToScreen(Point(0,0)).Y - fListSearch.Height;
-
-    // очищаем данные предыдущей активации
-    fListSearch.ClearUp;
+    /// получаем данные.
+    /// подразумевается, что запрос возвращает только два поля
+    /// первое - отображается в списке, второе - id соответствующей записи в базе
+    if not dmOQ(currSQL) then exit;
 
     // заполняем массив данных списка, на который будем опираться при построении и фильтрации
     if DefText <> '' then
@@ -79,6 +65,43 @@ begin
         );
         Core.DM.Query.Next;
     end;
+
+end;
+
+function TListSearch.Execute: boolean;
+begin
+    result := false;
+
+    // проверяем инициализацию
+    if not Assigned(Parent) or (SQL = '') then exit;
+
+    SelText := '';
+    SelData := 0;
+
+    // создаем и инициализируем форму
+    if not Assigned( fListSearch ) then
+       fListSearch := TfListSearch.Create(nil);
+
+    // очищаем данные предыдущей активации
+    fListSearch.ClearUp;
+
+    // располагаем под целевым компонентом
+    fListSearch.Width := parent.Width;//max(parent.Width, 300);
+    fListSearch.Top := parent.ClientToScreen(Point(0,0)).Y + parent.Height;
+    fListSearch.Left := parent.ClientToScreen(Point(0,0)).X;
+
+    if   pos( '#', SQL ) <> 0
+    then fListSearch.Callback := CustomData;
+    /// метод, вызываемый для обновления данных в списке формы при изменении
+    /// строки поиска. будет вызываться, если в запросе есть динамическая составляющая:
+    /// переменная в решетках, например #VALUE#.
+
+    if fListSearch.Top + fListSearch.Height > Screen.Height
+    then
+        fListSearch.Top := parent.ClientToScreen(Point(0,0)).Y - fListSearch.Height;
+
+    /// первоначальное получение данных и заполнение списка
+    CustomData( '' );
 
     // показываем форму и забираем данные, если не было отмены вызова
     if (fListSearch.ShowModal = mrOk) and

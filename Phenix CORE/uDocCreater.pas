@@ -52,9 +52,10 @@ unit uDocCreater;
       TDocCreater.Template.InitCustom
               инициализация пустого шаблона с пользовательскими размерами листа
 
-  3. Установка стилей и колонититулов
+  3. Установка стилей и колонититулов. изначально, набор стилей пуст.
       TDocCreater.SetBaseStyle
-              добавляет в стили документа базовый набор правил для параграфов и таблиц
+              добавляет в стили документа базовый набор правил для параграфов и таблиц.
+              применяется, если базовые стили подходят.
       TDocCreater.SetStyle
               добавляет в стили документа новый стиль
       TDocCreater.Colontitul.WordLoadFromFile
@@ -406,11 +407,12 @@ const
         '  #STYLE#'+
         ' </style>'+
         ' </head>'+
+//        ' <body lang=RU ONCONTEXTMENU="return false">'+
         ' <body lang=RU>'+
         '  <div class=WordSection1>'+
         '   #CONTENT#'+
-        '  </div>'+
-        ' </body>'+
+        '</div>'+
+        '</body>'+
         '</html>';
 
     // шаблон дополнительного файла для колонтитулов WORD.

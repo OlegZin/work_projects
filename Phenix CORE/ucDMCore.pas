@@ -29,6 +29,10 @@ function dbUtils_ExecQuery(Query: TADOQuery; sql: string; errorMessage: string =
 begin
 
     Core.DM.DBError := '';
+
+    if sql = '' then exit;
+    if not Assigned(Query) then exit;
+
     result := true;
 
     try
@@ -51,6 +55,11 @@ function dbUtils_SimpleValueDefQuery(Query: TADOQuery; sql: string; def: variant
 begin
 
     Core.DM.DBError := '';
+
+    result := false;
+
+    if sql = '' then exit;
+    if not Assigned(Query) then exit;
 
     try
         Core.Log.Query(sql, errorMessage);
@@ -91,6 +100,12 @@ begin
 
     Core.DM.DBError := '';
 
+    result := false;
+
+    if sql = '' then exit;
+    if not Assigned(Query) then exit;
+
+
     try
         Core.Log.Query(sql, errorMessage);
 
@@ -103,7 +118,6 @@ begin
         begin
           Core.Log.Error(E.Message, errorMessage);
           Core.DM.DBError := errorMessage + #13#13 + E.Message;
-          result := false;
         end;
     end;
 end;

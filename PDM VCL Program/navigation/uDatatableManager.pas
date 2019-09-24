@@ -1,15 +1,45 @@
 unit uDatatableManager;
 
+////////////////////////////////////////////////////////////////////////////////
+///
+///    набор сервисных методов настройки таблиц для отображения данных в различных
+///    конфигурациях, что позволяет через один компонент отображать различные
+///    вариации столбцов для разных наборов данных
+///
+////////////////////////////////////////////////////////////////////////////////
+
 interface
 
-uses DBGridEh, StrUtils, Variants, SysUtils, uPhenixCORE;
+uses DBGridEh, StrUtils, Variants, SysUtils, uPhenixCORE, VCL.Controls, DB,
+     VirtualTrees, VCL.Graphics, System.Types;
 
 type
 
+    TFieldInfo = record
+        field: string;          // имя поля из датасета данные которого будем отображать
+        caption: string;        // текст заголовка таблицы
+        kind: integer;          // тип поля текст(0)/картинка(1)
+        width: integer;         // ширина столбца
+        sort_pass: boolean;     // пропускать ли для данного поля настройку возможности сортировки
+        filter_pass: boolean;   // пропускать ли для данного поля настройку возможности фильтрации
+        imagelist: TImageList;  // набор картинок для поля
+        KeyList: string;        // строка с ключевыми значениями для imagelist
+    end;
+
+    TConfig = record
+        name : string;                 // имя конфигурации
+        fields : array of TFieldInfo;  // данные полей
+        /// будут отображены только те поля, которые добавлены в этот массив и
+        /// реально существуют в наборе данных
+        /// при этом, порядок упоминания важен, поскольку именно в порядке от начала массива к концу
+        /// столбцы будут добавляться в таблицу
+    end;
+
     TDatatableManager = class
       public
-        function GetFilterByColumns(grid: TDBGridEh): string;
+        function GetFilterByColumns(grid: TDBGridEh; addonPart: string = ''): string;
             // получение sql строки для фильтра датасета из внутреннего формата фильтра грида
+            // addonPart будет подставлено вначале фильтра
 
         function ConfigureForFilter(grid: TDBGridEh; pass: array of integer): boolean;
             // автоматическая настройка грида на работу с фильтрами столбцов
@@ -18,8 +48,24 @@ type
         function ConfigureForSorting(grid: TDBGridEh; pass: array of integer): boolean;
             // автоматическая настройка грида на сортировку в столбцах
             // позволяет настроить нулевый грид для работы
+
+        function CreateConfiguration( name: string ): boolean;
+        /// создает новую пустую конфигурацию
+        function ApplyConfiguration( name: string; grid: TDBGridEh ): boolean;
+        /// применяет указанную конфигурацию к указанной таблице
+        function AddConfigField(conf_name, _field_name, _caption: string; _kind, _width: integer;
+            _sort_pass: boolean = false; _filter_pass: boolean = false; _imgList: TImagelist = nil; _keylist: string = '' ): boolean;
+
       private
+        fConfig : array of TConfig;
+
         function Passed(index: integer; arr: array of integer): boolean;
+            // находится ли указанный индекс колонки в списке пропускаемых при инициализации
+        function ConfIndex( name: string ): integer;
+
+        procedure SetColumnFilter( column: TColumnEh; name: string; ds: TDataSource; filter: boolean );
+        procedure SetColumnSort( column: TColumnEh; filter: boolean );
+
     end;
 
 
@@ -27,8 +73,14 @@ implementation
 
 { TDatatableManager }
 
+const
+    FIELD_KIND_TEXT = 0;
+    FIELD_KIND_IMAGE = 1;
+
+
 function TDatatableManager.Passed(index: integer;
   arr: array of integer): boolean;
+/// находится ли указанный индекс колонки в списке пропускаемых при инициализации
 var
    j: integer;
 begin
@@ -36,6 +88,120 @@ begin
    for j := 0 to High(arr) do
        if   arr[j] = index
        then result := true;
+end;
+
+function TDatatableManager.ConfIndex(name: string): integer;
+var
+    i : integer;
+    found : boolean;
+begin
+    result := -1;
+
+    // ищем конфигурацию с указанным именем
+    for i := Low(fConfig) to High(fConfig) do
+    if fConfig[i].name = name then
+    begin
+        result := i;
+        exit;
+    end;
+end;
+
+function TDatatableManager.AddConfigField(conf_name, _field_name, _caption: string; _kind,
+  _width: integer; _sort_pass, _filter_pass: boolean; _imgList: TImagelist;
+  _keylist: string): boolean;
+/// для указанной конфигурации добавляем новое описание поля
+var
+    i : integer;
+begin
+    result := false;
+    i := ConfIndex( conf_name );
+
+    // конфигурация найдена
+    if i = -1 then exit;
+
+    // добавляем данные нового поля
+    SetLength(fConfig[i].fields, Length(fConfig[i].fields)+1);
+    with fConfig[i].fields[High(fConfig[i].fields)] do
+    begin
+        field := _field_name;
+        caption := _caption;
+        kind := _kind;
+        width := _width;
+        sort_pass := _sort_pass;
+        filter_pass := _filter_pass;
+        imagelist := _imgList;
+        keylist := _keylist;
+    end;
+
+    result := true;
+end;
+
+function TDatatableManager.ApplyConfiguration(name: string;
+  grid: TDBGridEh): boolean;
+/// для переданной таблицы настраниваем поля, согласно указанной конфигурации
+///
+var
+    i, c : integer;
+    col: TColumnEh;
+    field: TFieldInfo;
+begin
+    i := ConfIndex( name );
+    if i = -1 then exit;
+
+    /// разрешаем автосортировку
+    grid.OptionsEh := grid.OptionsEh + [dghAutoSortMarking];
+
+    lE(grid.Columns[0].KeyList.CommaText);
+    /// грохаем имеющиеся колонки
+    grid.Columns.Clear;
+
+    for c := Low(fConfig[i].fields) to High(fConfig[i].fields) do
+    begin
+        field := fConfig[i].fields[c];
+
+        /// создаем новую колонку
+        col := grid.Columns.Add;
+
+        col.FieldName := field.field;
+        col.Title.Caption := field.caption;
+
+        SetColumnFilter( col, col.FieldName, grid.DataSource, not field.filter_pass );
+        SetColumnSort( col, not not field.sort_pass );
+
+        if field.kind = FIELD_KIND_TEXT then
+        // текстовое поле
+        begin
+            col.Width := field.width
+        end;
+
+        // поле с иконкой
+        if field.kind = FIELD_KIND_IMAGE then
+        begin
+            col.MinWidth := field.width;
+            col.MaxWidth := field.width;
+            col.ImageList := field.imagelist;
+            col.KeyList.CommaText := field.KeyList;
+        end;
+
+    end;
+
+
+end;
+
+procedure TDatatableManager.SetColumnFilter( column: TColumnEh; name: string; ds: TDataSource; filter: boolean );
+begin
+    if filter then
+    begin
+        column.STFilter.DataField := name;
+        column.STFilter.ListSource := ds;
+        column.STFilter.Visible := true;
+    end else
+        column.STFilter.Visible := false;
+end;
+
+procedure TDatatableManager.SetColumnSort(column: TColumnEh; filter: boolean);
+begin
+    column.Title.TitleButton := filter;
 end;
 
 function TDatatableManager.ConfigureForFilter(grid: TDBGridEh; pass: array of integer): boolean;
@@ -58,13 +224,18 @@ begin
 
     grid.STFilter.Visible := true;
     for I := 0 to grid.Columns.Count-1 do
-    if not Passed(i, pass) then
+    SetColumnFilter( grid.Columns[i], grid.Columns[i].FieldName, grid.DataSource, not Passed(i, pass) );
+{    if not Passed(i, pass) then
     begin
         grid.Columns[i].STFilter.DataField := grid.Columns[i].FieldName;
         grid.Columns[i].STFilter.ListSource := grid.DataSource;
         grid.Columns[i].STFilter.Visible := true;
     end else
         grid.Columns[i].STFilter.Visible := false;
+}
+    if   Assigned(grid.DataSource) and Assigned(grid.DataSource.DataSet)
+    then grid.DataSource.DataSet.Filtered := true;
+
 end;
 
 function TDatatableManager.ConfigureForSorting(grid: TDBGridEh;
@@ -84,7 +255,24 @@ begin
         grid.Columns[i].Title.TitleButton := not Passed(i, pass);
 end;
 
-function TDatatableManager.GetFilterByColumns(grid: TDBGridEh): string;
+function TDatatableManager.CreateConfiguration(name: string): boolean;
+var
+    i: integer;
+begin
+    result := false;
+
+    // не допускаем постор имени конфигурации
+    for i := Low(fConfig) to High(fConfig) do
+    if fConfig[i].name = name then exit;
+
+    // создаем пустую
+    SetLength( fConfig, Length(fConfig)+1);
+    fConfig[High(fConfig)].name := name;
+
+    result := true;
+end;
+
+function TDatatableManager.GetFilterByColumns(grid: TDBGridEh; addonPart: string = '' ): string;
 { используется в обработчике события OnApplyFilter компонента DBGridEh
   для формирования из строки внутреннего формата в sql cтроку фильтра
   для подстановки в датасет таблицы.
@@ -251,6 +439,12 @@ begin
             fields_and := ' and ';
         end;
     end;
+
+    // приклеиваем переданную извне часть
+    if   ( Trim( addonPart ) <> '' ) and ( Trim( filter ) <> '' )
+    then filter := '(' + addonPart + ') AND ( ' + filter + ' )'
+//    then filter := addonPart + ' AND ' + filter
+    else filter := addonPart + filter;
 
     lM('Фильтр: ' + filter);
 

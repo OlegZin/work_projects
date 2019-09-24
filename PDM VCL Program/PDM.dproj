@@ -71,13 +71,17 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.2;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>2</VerInfo_Build>
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <DCC_Define>test;$(DCC_Define)</DCC_Define>
         <DCC_DcpOutput>Y:\DPM Neftrmash\Compiled\PDM VCL Program\</DCC_DcpOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_UnitSearchPath>Y:\DPM Neftrmash\Source\Phenix CORE;Y:\DPM Neftrmash\Source\Phenix CORE\VCL log form;Y:\DPM Neftrmash\Source\Phenix CORE\VCL ListSearch;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_BplOutput>Y:\DPM Neftrmash\Compiled\PDM VCL Program\</DCC_BplOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_DcuOutput>Y:\DPM Neftrmash\Compiled\PDM VCL Program\</DCC_DcuOutput>
-        <DCC_ExeOutput>Y:\DPM Neftrmash\Compiled\PDM VCL Program\</DCC_ExeOutput>
+        <DCC_ExeOutput>Z:\test\pdm\</DCC_ExeOutput>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -117,10 +121,6 @@
             <Form>fAddDoc</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="test\Unit2.pas">
-            <Form>Form2</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="uObjectCatalog.pas">
             <Form>fObjectCatalog</Form>
         </DCCReference>
@@ -133,6 +133,45 @@
             <Form>fObjectCard</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="uProject.pas">
+            <Form>fProject</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="templates\uTemplatesHTML.pas"/>
+        <DCCReference Include="uAddProject.pas">
+            <Form>fAddProject</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="tools\uCommonOperations.pas"/>
+        <DCCReference Include="tools\uFileCatcher.pas"/>
+        <DCCReference Include="tools\uKompasManager.pas"/>
+        <DCCReference Include="uLoadSpec.pas">
+            <Form>fLoadSpec</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="uWorkGroupEditor.pas">
+            <Form>fWorkgroupEditor</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="tools\uCatalog.pas">
+            <Form>fCatalog</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="tools\uRolesEditor.pas">
+            <Form>fRolesEditor</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="tools\uRoleEdit.pas">
+            <Form>fRoleEdit</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="tools\uUserListManager.pas"/>
+        <DCCReference Include="tools\uUserList.pas">
+            <Form>fUserList</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="tools\uDrawSpecifManager.pas"/>
+        <DCCReference Include="uTypes.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -159,7 +198,7 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="1">
-                <DeployFile LocalName="..\..\Compiled\PDM VCL Program\PDM.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Z:\test\pdm\PDM.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>PDM.exe</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -545,9 +584,9 @@
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME).app"/>
             </Deployment>
             <Platforms>
                 <Platform value="Win32">True</Platform>

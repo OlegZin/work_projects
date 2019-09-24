@@ -6,7 +6,8 @@ uses
   uMain in 'uMain.pas' {fMain},
   uProgManager in '..\PDM Config\Programs\uProgManager.pas',
   uConstants in 'uConstants.pas',
-  uPhenixCore in '..\Phenix CORE\uPhenixCore.pas';
+  uPhenixCore in '..\Phenix CORE\uPhenixCore.pas',
+  uAtlas in 'uAtlas.pas' {fAtlas};
 
 {$R *.res}
 

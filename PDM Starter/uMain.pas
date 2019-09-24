@@ -24,6 +24,7 @@ type
     lyInfo: TLayout;
     Image1: TImage;
     lbVersions: TListBox;
+    Image2: TImage;
     procedure bDetailsMouseEnter(Sender: TObject);
     procedure bDetailsMouseLeave(Sender: TObject);
     procedure lbProgramsChange(Sender: TObject);
@@ -31,6 +32,7 @@ type
     procedure bDetailsClick(Sender: TObject);
     procedure Circle1Click(Sender: TObject);
     procedure bRunClick(Sender: TObject);
+    procedure Image2DblClick(Sender: TObject);
   private
     { Private declarations }
     procedure SetWindowWidth;
@@ -69,6 +71,8 @@ var
 implementation
 
 {$R *.fmx}
+
+uses uAtlas, uAdminPanel;
 
 procedure TfMain.bDetailsClick(Sender: TObject);
 begin
@@ -144,22 +148,39 @@ begin
 end;
 
 procedure TfMain.FormShow(Sender: TObject);
+var
+   error: string;
 begin
     bRun.Visible := false;
     SetWindowWidth;
 
+    // создаем форму-контейнер с иконками
+    fAtlas := TfAtlas.Create(self);
+
+    error := '';
+
+    // инициализация ядра
     Core := TCore.Create;
     Core.Init(
         PROG_NAME,
         CONNECTION_STRING,
+        DEFAULT_DB,
         SETTINGS_TABLE_NAME,
-        LOG_FILEPATH
+        LOG_FILEPATH,
+        error
     );
 
+    if error <> '' then
+    begin
+        ShowMessage( error );
+        exit;
+    end;
+
+    // инициализация менеджера списка программ
     mngProgs.Init(
         lbPrograms,
         lbVersions,
-        ICON_FILEPATH,
+        '', // ICON_FILEPATH,
         DEFAULT_PROG_ICON,
         VERSION_PERSONAL_ICON,
         VERSION_WORK_ICON,
@@ -172,6 +193,16 @@ begin
     then
         mngProgs.RefreshProgList;
 
+end;
+
+procedure TfMain.Image2DblClick(Sender: TObject);
+begin
+    if Not Assigned( fAdminPanel )
+    then fAdminPanel := TfAdminPanel.Create(self);
+
+    if not fAdminPanel.Visible
+    then fAdminPanel.Show
+    else fAdminPanel.Hide;
 end;
 
 procedure TfMain.lbProgramsChange(Sender: TObject);

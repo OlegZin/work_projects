@@ -3,7 +3,7 @@ unit uProgManager;
 interface
 
 uses
-    FMX.ListBox, FMX.Layouts, SysUtils;
+    FMX.ListBox, FMX.Layouts, SysUtils, uAtlas;
 
 type
 
@@ -314,7 +314,7 @@ var
     i: integer;
     lab: TLabel;
     ly: TLayout;
-
+    source: TImage;
 begin
 
     lbProgs.Items.Clear;
@@ -329,9 +329,12 @@ begin
         lbProgs.ListItems[lbProgs.Items.Count-1].Height          := 46;
         lbProgs.ListItems[lbProgs.Items.Count-1].Tag             := ProgsArray[i].id;
         lbProgs.ListItems[lbProgs.Items.Count-1].ItemData.Detail := ProgsArray[i].detail;
-
+{
         if FileExists(IconPath + ProgsArray[i].icon) then
             lbProgs.ListItems[lbProgs.Items.Count-1].ItemData.Bitmap.LoadFromFile( IconPath + ProgsArray[i].icon );
+}
+        source := TImage( fAtlas.FindComponent( ProgsArray[i].icon ) );
+        lbProgs.ListItems[lbProgs.Items.Count-1].ItemData.Bitmap.Assign( source.MultiResBitmap.Bitmaps[1.0] );
 
         lbProgs.ListItems[lbProgs.Items.Count-1].StyleLookup     := 'listboxitembottomdetail';
 
@@ -381,6 +384,7 @@ procedure TProgManager.RefreshVersionList;
 var
     i: integer;
     ProgId: integer;
+    source : TImage;
 begin
     lbVersions.Items.Clear;
 
@@ -397,16 +401,12 @@ begin
 
         case VersionsArray[i].Status of
 
-            STATE_PERSONAL:
-                if FileExists( IconPath + IconPersonal ) then
-                    lbVersions.ListItems[lbVersions.Items.Count-1].ItemData.Bitmap.LoadFromFile( IconPath + IconPersonal );
-            STATE_WORK:
-                if FileExists( IconPath + IconWork ) then
-                    lbVersions.ListItems[lbVersions.Items.Count-1].ItemData.Bitmap.LoadFromFile( IconPath + IconWork );
-            STATE_TEST:
-                if FileExists( IconPath + IconTest ) then
-                    lbVersions.ListItems[lbVersions.Items.Count-1].ItemData.Bitmap.LoadFromFile( IconPath + IconTest );
+            STATE_PERSONAL: source := TImage( fAtlas.FindComponent( IconPersonal ) );
+            STATE_WORK:     source := TImage( fAtlas.FindComponent( IconWork ) );
+            STATE_TEST:     source := TImage( fAtlas.FindComponent( IconTest ) );
         end;
+
+        lbVersions.ListItems[lbVersions.Items.Count-1].ItemData.Bitmap.Assign( source.MultiResBitmap.Bitmaps[1.0] );
 
         lbVersions.ListItems[lbVersions.Items.Count-1].StyleLookup     := 'listboxitembottomdetail';
 

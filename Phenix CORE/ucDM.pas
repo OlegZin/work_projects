@@ -15,7 +15,7 @@ type
     Query: TADOQuery;
     DBError: String;
 
-    function InitDBConnection(conString: widestring): boolean;
+    function InitDBConnection(conString, default_db: widestring): boolean;
                          // получение настроек и подключение к бд
     function GetDataset: TADOQuery;
 
@@ -111,26 +111,44 @@ begin
     result.Connection := ADOConnection;
 end;
 
-function Tdm.InitDBConnection(conString: widestring): boolean;
+function Tdm.InitDBConnection(conString, default_db: widestring): boolean;
 begin
 
     result := false;
 
     if Trim(conString) = '' then
     begin
-//        error := 'Не указана строка параметров подключения';
+        CORE.DM.DBError := CORE.Log.Error('Не указана строка параметров подключения');
         exit;
     end;
 
-    ADOConnection.ConnectionString := conString;
-    ADOConnection.Connected := true;
-    result := ADOConnection.Connected;
+    try
+        ADOConnection.LoginPrompt:= false;
+        ADOConnection.ConnectionString := conString;
+        if   default_db <> ''
+        then ADOConnection.DefaultDatabase := default_db;
+        ADOConnection.Connected := true;
+    except
+        on e: exception do
+        begin
+            CORE.DM.DBError := Core.Log.Error( 'Ошибка инициализации подключения к БД:' + sLineBreak + e.Message );
+            exit;
+        end;
+    end;
 
-    ADOQTemp := TADOQuery.Create(self);
-    ADOQTemp.Connection := ADOConnection;
-    Query := ADOQtemp;
+    try
+        ADOQTemp := TADOQuery.Create(self);
+        ADOQTemp.Connection := ADOConnection;
+        Query := ADOQtemp;
+    except
+        on e: exception do
+        begin
+            CORE.DM.DBError := Core.Log.Error( 'Ошибка инициализации компонента запросов (query):' + sLineBreak + e.Message );
+            exit;
+        end;
+    end;
 
-
+    result := true;
 end;
 
 

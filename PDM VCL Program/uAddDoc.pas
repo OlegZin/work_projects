@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, VCL.Imaging.jpeg, uConstants;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, VCL.Imaging.jpeg, uConstants, StrUtils;
 
 const
     SAVE_MODE_NEW_DOCUMENT = 0;
@@ -41,6 +41,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure bCloseClick(Sender: TObject);
     procedure bOkClick(Sender: TObject);
+    procedure eNameKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
     ext : string;       // расширение файла
@@ -57,7 +58,7 @@ type
    ,mode                    // режим работы:
                             //   0 - добавление первой версии,
                             //   1 - добавление последующей версии (нельзя править путь и имя)
-   ,doc_type                // тип документа (id из таблицы document_type)
+//   ,doc_type                // тип документа (id из таблицы document_type)
             : integer;
 
     callback: TCallback;
@@ -70,7 +71,7 @@ implementation
 
 {$R *.dfm}
 uses
-    uMain, uPhenixCore;
+    uMain, uPhenixCore, uFileManager;
 
 procedure TfAddDoc.bSelectFileClick(Sender: TObject);
 begin
@@ -79,13 +80,27 @@ begin
         eFileName.Text := OpenDialog1.FileName;
         eName.Text := ChangeFileExt( ExtractFileName( OpenDialog1.FileName ), '' );
         ext := ExtractFileExt( ExtractFileName( OpenDialog1.FileName ) );
-        Image1.Picture.Bitmap.Handle := mngFile.GetThumbnailImage( eFileName.Text, image1.Height, Image1.Width);
-        doc_type := mngFile.GetFileType( ext );
+        Image1.Picture.Bitmap.Handle := mngFile.GetThumbnailImage( eFileName.Text, IMAGE_PREVWIEW_SIZE, IMAGE_PREVWIEW_SIZE);
+//        doc_type := mngFile.GetFileType( ext );
 
         // проверка на дублирование имени (считаем, что это первая версия документа)
+        if not eName.ReadOnly then
+        begin
+            lPresentError.Visible := mngData.GetNextVersionNumber( eName.Text + ext, object_id ) <> 1;
+            bOk.Enabled := not lPresentError.Visible;
+        end;
+
+    end;
+end;
+
+procedure TfAddDoc.eNameKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+    // проверка на дублирование имени (считаем, что это первая версия документа)
+    if not eName.ReadOnly then
+    begin
         lPresentError.Visible := mngData.GetNextVersionNumber( eName.Text + ext, object_id ) <> 1;
         bOk.Enabled := not lPresentError.Visible;
-
     end;
 end;
 
@@ -99,12 +114,9 @@ begin
     mComment.Lines.Text   := '';
     ext                   := '';
 
-    // {!} удаляем превьюшку файла, если есть
-//    DeleteFile(DIR_PREVIEW + ExtractFilename(eFileName.Text) );
-
     // сразу подгружаем картинку, если указан файл
     if   filename <> ''
-    then Image1.Picture.Bitmap.Handle := mngFile.GetThumbnailImage( eFileName.Text, image1.Height, Image1.Width)
+    then Image1.Picture.Bitmap.Handle := mngFile.GetThumbnailImage( eFileName.Text, IMAGE_PREVWIEW_SIZE, IMAGE_PREVWIEW_SIZE)
     else Image1.Picture.Bitmap.Handle := 0;
 
     if filename <> '' then
@@ -127,24 +139,12 @@ begin
 end;
 
 procedure TfAddDoc.bOkClick(Sender: TObject);
-var
-    jpg: TJPEGImage;
 begin
 
-    if Assigned(Callback) then
-    if Callback( object_id, version_id, doc_type, eName.Text, ext, eFileName.Text, mComment.Lines.Text ) then
-    begin
-        // кидаем превьюшку в папку пользователя
-        jpg:=TJPEGImage.Create();
-        jpg.Assign(Image1.Picture.Graphic);
-        jpg.CompressionQuality:=60;
-        jpg.Compress();
-        jpg.SaveToFile( DIR_PREVIEW + '(' + version + ')' + eName.Text  + '.jpg' );
-        jpg.Free;
+    if    Assigned(Callback) then
 
-        ShowMessage('Документ успешно добавлен');
-
-    end;
+    if    Callback( object_id, version_id, 0{doc_type}, eName.Text, ext, eFileName.Text, mComment.Lines.Text )
+    then  ShowMessage('Документ успешно добавлен');
 
     Close;
 

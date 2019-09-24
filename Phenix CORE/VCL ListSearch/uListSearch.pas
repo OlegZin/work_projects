@@ -11,6 +11,8 @@ type
   TElem = array[0..1] of Variant;
   TData = array of TElem;
 
+  TCallback = procedure(value: string) of object;
+
   TfListSearch = class(TForm)
     Panel1: TPanel;
     lbVariants: TListBox;
@@ -33,8 +35,11 @@ type
     procedure RefreshList;
     { Private declarations }
   public
+    Callback : TCallback;
+
     procedure ClearUp;
     procedure AddData(val1, val2: variant);
+
     { Public declarations }
   end;
 
@@ -119,7 +124,11 @@ var
     i: integer;
 begin
     bSelect.Enabled := false;
+
+    if Assigned(Callback) then Callback( eText.Text );
+
     lbVariants.Items.Clear;
+
     for I := 0 to High(Data) do
     if ( Trim(eText.Text) = '' ) or
        ( Pos(AnsiUpperCase(eText.text), AnsiUpperCase(Data[i][0])) > 0 ) then

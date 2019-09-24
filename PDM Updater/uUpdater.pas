@@ -9,7 +9,8 @@ uses
   FMX.Ani, Windows, ShellApi;
 
 const
-    SOURCE_PATH = '\\fileserver\Общая папка\ОА\! Внутренняя ОА\_Проекты разработчиков\SourceCode\Зиновьев О\DPM Neftrmash\Compiled\PDM Starter\';
+//    SOURCE_PATH = '\\fileserver\Общая папка\ОА\! Внутренняя ОА\_Проекты разработчиков\SourceCode\Зиновьев О\DPM Neftrmash\Compiled\PDM Starter\';
+    SOURCE_PATH = '\\Server-htm.ntm.grouphms.local\bdnft$\';
     STARTER_FILENAME = 'pdmStarter.exe';
 
 type

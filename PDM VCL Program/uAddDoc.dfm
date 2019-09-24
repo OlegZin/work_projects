@@ -291,6 +291,7 @@ object fAddDoc: TfAddDoc
     Height = 21
     BorderStyle = bsNone
     TabOrder = 4
+    OnKeyUp = eNameKeyUp
   end
   object pUnderline: TPanel
     Left = 30

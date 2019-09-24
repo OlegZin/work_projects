@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.496,=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.972,=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.209,Y:\DPM Neftrmash\Source\PDM Updater\uUpdater.fmx=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.209,Y:\DPM Neftrmash\Source\PDM Updater\uUpdater.pas=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.496,=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.422,Y:\DPM Neftrmash\Source\PDM Updater\Updater.dproj=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Project2.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.341,=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.694,=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
-    <Transaction>2018.10.24 15:05:32.341,=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
-    <Transaction>2018.10.24 15:10:02.209,Y:\DPM Neftrmash\Source\PDM Updater\uUpdater.pas=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
-    <Transaction>2018.10.24 15:10:02.209,Y:\DPM Neftrmash\Source\PDM Updater\uUpdater.fmx=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Unit3.fmx</Transaction>
-    <Transaction>2018.10.24 15:10:45.422,Y:\DPM Neftrmash\Source\PDM Updater\Updater.dproj=C:\Users\zinovev\Documents\Embarcadero\Studio\Projects\Project2.dproj</Transaction>
   </Transactions>
 </BorlandProject>

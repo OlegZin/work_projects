@@ -28,7 +28,8 @@ type
 
         function Init(
             ProgramName: string;
-            ConnectionString: WideString;
+            ConnectionString
+           ,default_db : WideString;
             SettingsTableName,
             LogFilepath: string;
             var error: string
@@ -61,40 +62,44 @@ implementation
 
 { TCore }
 
-function TCore.Init(ProgramName: string; ConnectionString: WideString;
+function TCore.Init(ProgramName: string; ConnectionString, default_db: WideString;
   SettingsTableName, LogFilepath: string; var error : string): boolean;
 begin
 
-    result := true;
+    result := false;
 
     try
 
+        error := 'TLogManager.Create';
         Log          := TLogManager.Create;
         Log.SavePath := LogFilepath;
         Log.Init;
 
+        error := 'TSettingsManager.Create';
         Settings := TSettingsManager.Create;
         Mail     := TMailManager.Create;
 
+        error := 'Tdm.Create(nil)';
         DM       := Tdm.Create(nil);
-        DM.InitDBConnection(ConnectionString);
+        if not DM.InitDBConnection(ConnectionString, default_db) then
+        begin
+            error := CORE.DM.DBError;
+            exit;
+        end;
 
+        error := 'TLogManager.Create';
         User     := TUser.Create;
-        User.initUser( GetComputerNetName { GetWinLogin } );
+        User.initUser( {GetComputerNetName}  GetWinLogin  );
 
         LSearch := TListSearch.Create;
 
         Settings.ProgramName := ProgramName;
         Settings.TableName := SettingsTableName;
 
+        result := true;
     except
-
         on e: Exception do
-        begin
              error := e.Message;
-             result := false;
-        end;
-
     end;
 
 end;

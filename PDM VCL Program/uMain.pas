@@ -9,8 +9,10 @@ uses
   Vcl.StdCtrls, Data.DB, Data.Win.ADODB, MemTableDataEh, DataDriverEh,
   MemTableEh, Vcl.ExtCtrls, VirtualTrees, System.Actions, Vcl.ActnList,
   Vcl.ComCtrls, System.ImageList, Vcl.ImgList, Vcl.Mask, DBCtrlsEh, Vcl.Buttons,
-  Vcl.OleCtrls, SHDocVw, uSpecifTreeManager, uDataManager, EhLibADO, VCL.Imaging.jpeg,
-  Vcl.Menus, uFileManager, System.IOUtils, ShellApi, uDatatableManager;
+  Vcl.OleCtrls, SHDocVw, EhLibADO, VCL.Imaging.jpeg,
+  Vcl.Menus, uFileManager, System.IOUtils, ShellApi,
+
+  uDatatableManager, uObjectCard, uUserList, uDataManager, uSpecifTreeManager;
 
 type
 
@@ -26,75 +28,67 @@ type
     pageSpecif: TTabSheet;
     grdGroup: TDBGridEh;
     ilTreeIcons: TImageList;
-    pSearch: TPanel;
-    pageSearch: TTabSheet;
-    grdSearch: TDBGridEh;
     Panel2: TPanel;
-    bSearch: TImage;
     Panel3: TPanel;
     aSearch: TAction;
-    DBDateTimeEditEh1: TDBDateTimeEditEh;
-    eValue: TEdit;
     dateSelected: TDBDateTimeEditEh;
     bRefresh: TImage;
-    cbField: TComboBox;
     sbAddSection: TSpeedButton;
     sbEditSection: TSpeedButton;
-    sbAddObject: TSpeedButton;
     sbDelSection: TSpeedButton;
     pcObjects: TPageControl;
     tsObjects: TTabSheet;
-    tsDocument: TTabSheet;
     grdDocs: TDBGridEh;
     iPreview: TImage;
-    Label2: TLabel;
-    lAutor: TLabel;
     mDocComment: TMemo;
     ilDocTypes: TImageList;
-    Label3: TLabel;
-    lEditor: TLabel;
-    Label5: TLabel;
-    lbDocSupportFiles: TListBox;
-    Panel4: TPanel;
-    Label6: TLabel;
-    Panel5: TPanel;
-    Panel6: TPanel;
-    sbShowAgreeVersions: TSpeedButton;
-    sbShowAllVersions: TSpeedButton;
     ilAgree: TImageList;
     ilInwork: TImageList;
     bCreateDocPreview: TButton;
-    sbAddDocument: TSpeedButton;
     popObject: TPopupMenu;
-    menuAddDocument: TMenuItem;
     ilHas_docs: TImageList;
-    sbDeleteDocument: TSpeedButton;
-    sbOpenDoc: TSpeedButton;
-    sbTakeToWork: TSpeedButton;
-    sbSaveVersion: TSpeedButton;
-    sbCancelVersion: TSpeedButton;
-    sbOpenVersionDir: TSpeedButton;
-    sbOpenVersionFile: TSpeedButton;
-    Button3: TButton;
     sbShowObjectCatalog: TSpeedButton;
     mnMain: TMainMenu;
     N1: TMenuItem;
     Panel7: TPanel;
     lMainInfo: TLabel;
-    sbSaveWorkVersion: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     N2: TMenuItem;
     N3: TMenuItem;
     N4: TMenuItem;
+    popDocument: TPopupMenu;
+    menuOpenFile: TMenuItem;
+    N10: TMenuItem;
+    popNavFavorite: TPopupMenu;
+    N11: TMenuItem;
+    N12: TMenuItem;
+    N13: TMenuItem;
+    popNavEvents: TPopupMenu;
+    N14: TMenuItem;
+    popNavWorkObjects: TPopupMenu;
+    sbCreateProject: TSpeedButton;
+    Splitter2: TSplitter;
+    Splitter3: TSplitter;
+    Panel9: TPanel;
+    Splitter4: TSplitter;
+    N15: TMenuItem;
+    N5: TMenuItem;
+    menuWorkgroupEdit: TMenuItem;
+    menuGroupEdit: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    menuProgrammHelp: TMenuItem;
+    N9: TMenuItem;
+    menuUserChange: TMenuItem;
+    N16: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure Button1Click(Sender: TObject);
+    procedure button1Click(Sender: TObject);
     procedure aAdminPanelExecute(Sender: TObject);
     procedure bAddSectionClick(Sender: TObject);
-    procedure bSearchClick(Sender: TObject);
     procedure bEditSectionClick(Sender: TObject);
-    procedure aSearchExecute(Sender: TObject);
     procedure grdGroupGetCellParams(Sender: TObject; Column: TColumnEh;
       AFont: TFont; var Background: TColor; State: TGridDrawState);
     procedure grdGroupSelectionChanged(Sender: TObject);
@@ -102,20 +96,12 @@ type
     procedure grdSpecificCellClick(Column: TColumnEh);
     procedure sbDelSectionClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    procedure sbAddObjectClick(Sender: TObject);
+    procedure sbAddObject_Click(Sender: TObject);
     procedure pcObjectsChange(Sender: TObject);
-    procedure grdDocsRowDetailPanelShow(Sender: TCustomDBGridEh;
-      var CanShow: Boolean);
-    procedure grdDocsCheckRowHaveDetailPanel(Sender: TCustomDBGridEh;
-      var RowHaveDetailPanel: Boolean);
-    procedure sbAddDocumentClick(Sender: TObject);
-    procedure menuAddDocumentClick(Sender: TObject);
     procedure grdDocsApplyFilter(Sender: TObject);
     procedure bCreateDocPreviewClick(Sender: TObject);
-    procedure sbDeleteDocumentClick(Sender: TObject);
     procedure grdDocsCellClick(Column: TColumnEh);
     procedure sbOpenDocClick(Sender: TObject);
-    procedure sbTakeToWorkClick(Sender: TObject);
     procedure grdObjectColumns3CellButtons0Click(Sender: TObject;
       var Handled: Boolean);
     procedure grdObjectColumns6CellButtons0Click(Sender: TObject;
@@ -128,16 +114,9 @@ type
       var ButtonEnabled: Boolean);
     procedure pnNavigationChange(Sender: TObject);
     procedure sbOpenVersionDirClick(Sender: TObject);
-    procedure sbOpenVersionFileClick(Sender: TObject);
-    procedure sbCancelVersionClick(Sender: TObject);
-    procedure sbSaveVersionClick(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
     procedure sbShowObjectCatalogClick(Sender: TObject);
     procedure grdObjectApplyFilter(Sender: TObject);
-    procedure sbSaveWorkVersionClick(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
-    procedure grdSpecificDragOver(Sender, Source: TObject; X, Y: Integer;
-      State: TDragState; var Accept: Boolean);
     procedure grdSpecificDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure grdGroupDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
@@ -147,25 +126,65 @@ type
     procedure grdObjectDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
     procedure grdObjectDragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure sbAddObjectClick(Sender: TObject);
+    procedure sbOpenCardClick(Sender: TObject);
+    procedure grdGroupColumns0CellButtons0Down(Sender: TObject;
+      TopButton: Boolean; var AutoRepeat, Handled: Boolean);
+    procedure grdObjectColumns3CellButtons0Down(Sender: TObject;
+      TopButton: Boolean; var AutoRepeat, Handled: Boolean);
+    procedure sbCreateProjectClick(Sender: TObject);
+    procedure grdObjectCellClick(Column: TColumnEh);
+    procedure grdObjectDblClick(Sender: TObject);
+    procedure grdDocsDblClick(Sender: TObject);
+    procedure bRefreshClick(Sender: TObject);
+    procedure menuWorkgroupEditClick(Sender: TObject);
+    procedure menuGroupEditClick(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure menuProgrammHelpClick(Sender: TObject);
+    procedure menuUserChangeClick(Sender: TObject);
+    function ChangeUser( user_id: integer ): string;
+    procedure N16Click(Sender: TObject);
   private
     { Private declarations }
-    procedure RefreshSubitems( ItemTable, LinkTable: string; id: integer);
+    wndUserList : TfUserList;
+    wndArrProject : array of TForm;
+
+    fConfig: string;
+    /// имя конфигурации, которая в данный момент определена для таблицы grdObjects.
+    /// часть механизма динамической постройки отображаемых полей в списке объектов
+    /// в зависимости от выбранного раздела в структуре рабочего стола.
+    /// сами конфигурации формируются при инициализации программы.
+
     procedure EditSection;
     procedure EditObject;
     procedure ShowPreview( filename: string );
+
   public
     { Public declarations }
+    procedure SetCaption;
+
     procedure OnGroupCellChange;
     procedure ShowSubItems;
 
     function CreateNavigationObject( parent, child: integer; fields: string; values: array of variant ): integer;
-    procedure AddDocumentDialog;
     function CreatePreview( path, filename: string ): boolean;
-    procedure CheckButtons;
     procedure ClearStructure;
-    function AddDocCallback(object_id, version_id, doc_type: integer; Name, ext, FileName, Comment: string): boolean;
-    function SaveWorkDocCallback(object_id, version_id, doc_type: integer; Name, ext, FileName, Comment: string): boolean;
-    function SaveDocVersionCallback(object_id, version_id, doc_type: integer; Name, ext, FileName, Comment: string): boolean;
+
+    procedure ObjectPageCardCallback;
+    procedure CreateWorkTree;
+    function CreateStructTree(var SpecSection, AssSecttion: integer): integer;
+    procedure RefreshFilePreview;
+    procedure ShowObjectCard;
+
+    function CreateProject(name, mark: string; objectId, workgroupId: integer; comment, parent_prod_kod, prod_kod: string): boolean;
+        // функция вызывается из окошка создания проекта, когда пользователь подтверждает операцию
+        // технология callback применяется, чтобы не захламлять диалог функциональным кодом
+        // и иметь возможность менять поведение, передавая разные callback методы
+
+    function OpenProject( project_id: integer; pname, mark: string): TForm;
+        // по указанному id открывает окно проекта и подгружает в него все данные
+
+    procedure ClearProjectWndLink( form: TForm );
   end;
 
 var
@@ -189,7 +208,9 @@ implementation
 uses
     uPhenixCORE, uConstants, uWelcom, ucTools, uAdminPanel,
     uEditNavigation, uEditSection, uEditObject,
-    Math, uAddDoc, Unit2, uObjectCatalog, uSpecTreeFree;
+    Math, uAddDoc, uObjectCatalog, uSpecTreeFree,
+    uAddProject, uCommonOperations, uKompasManager, uWorkGroupEditor,
+    uRolesEditor, uProject;
 
 const
 
@@ -205,9 +226,11 @@ const
 
     // колонки таблицы спецификаций
     SPC_COL_LID   = 3;      // id записи связи
+    SPC_COL_CHILD = 4;      // id объекта
 
     // колонки таблицы поиска
     SRH_COL_LID   = 3;      // id записи связи
+    SRH_COL_CHILD = 4;      // id объекта
 
     // колонки таблицы с объектами (grdObject)
     COL_OBJECT_FILE_BUTTONS = 5;
@@ -219,7 +242,6 @@ const
 procedure TfMain.FormShow(Sender: TObject);
 var
    error: string;
-   i: integer;
 begin
 
     fWelcome := TfWelcome.Create(nil);
@@ -230,6 +252,7 @@ begin
     if not Core.Init(
                 PROG_NAME,
                 CONNECTION_STRING,
+                '',
                 SETTINGS_TABLE_NAME,
                 LOG_FILEPATH,
                 error
@@ -241,9 +264,11 @@ begin
         halt;
     end;
 
-
     lC('uMain.FormCreate');
-    lM(IntToStr(Core.User.id));
+
+{$IFDEF test}
+//    CORE.User.initUserByID(27);
+{$ENDIF}
 
 //    Core.Settings.RestoreForm(self);
 
@@ -252,20 +277,20 @@ begin
     // формируем дерево групп
     mngGroupTree := TTreeManager.Create;
     mngGroupTree.init(grdGroup, VIEW_GROUP);
-    mngGroupTree.GetTreeLevel(0,0);
+//    mngGroupTree.GetTreeLevel(0,0);
+    mngGroupTree.Refresh([]);
 
     fWelcome.Progress(10);
 
     // формируем дерево спецификаций
     mngSpecTree := TTreeManager.Create;
+    mngSpecTree.SetExtFields(['full_name'], ['ftString']);
     mngSpecTree.init(grdSpecific, VIEW_OBJECT);
-    mngSpecTree.GetTreeLevel(0,0);
-
-    fWelcome.Progress(10);
-
-    // настраиваем менеджер поиска
-    mngSearchTree := TTreeManager.Create;
-    mngSearchTree.init(grdSearch, VIEW_OBJECT);
+//    mngSpecTree.GetTreeLevel(0,0);
+    // метод подгружает дерево на несколько уровней стразу, что позволяет
+    // корректно отобразить крестики, где есть вложенные ветки, поскольку
+    // компонент не позволяет напрямую управлять ими, как, например, VirtualTree
+    mngSpecTree.Refresh([]);
 
     fWelcome.Progress(10);
 
@@ -277,6 +302,8 @@ begin
     // добавление, удаление, изменение объектов и связей с автоматическим
     // гененрированием истории изменений
     mngData := TDataManager.Create;
+
+    mngKompas.sTempPath( DIR_TEMP );
 
     fWelcome.Progress(10);
 
@@ -291,8 +318,30 @@ begin
     mngDatatable.ConfigureForFilter( grdDocs, [0,1] );
     mngDatatable.ConfigureForSorting( grdDocs, [] );
 
-//    for I := 0 to grdDocs.Columns.Count-1 do
-//        grdDocs.Columns[i].STFilter.ListSource := grdDocs.DataSource;
+    /// конфигурация полей поумолчанию
+    if mngDatatable.CreateConfiguration( COL_CONFIG_DEF ) then
+    begin
+        mngDatatable.AddConfigField( COL_CONFIG_DEF, 'kind', '', FIELD_KIND_IMAGE, 20, true, true, ilTreeIcons, '0,1,2,3,4,5,6,7,8,9,10,11,12,100;');
+        mngDatatable.AddConfigField( COL_CONFIG_DEF, 'icon', '', FIELD_KIND_IMAGE, 20, true, true, ilTreeIcons, '0,1,2,3,4,5,6,7,8,9,10,11,12,100');
+        mngDatatable.AddConfigField( COL_CONFIG_DEF, 'has_docs', '', FIELD_KIND_IMAGE, 20, true, true, ilHas_docs, '0,1');
+        mngDatatable.AddConfigField( COL_CONFIG_DEF, 'full_mark', 'Обозначение', FIELD_KIND_TEXT, 300);
+        mngDatatable.AddConfigField( COL_CONFIG_DEF, 'name', 'Наименование', FIELD_KIND_TEXT, 300);
+        mngDatatable.AddConfigField( COL_CONFIG_DEF, 'count', 'Кол-во', FIELD_KIND_TEXT, 50);
+    end;
+
+    /// конфигурация для показа списка проектов
+    if mngDatatable.CreateConfiguration( COL_CONFIG_PROJECT ) then
+    begin
+        mngDatatable.AddConfigField( COL_CONFIG_PROJECT, 'kind', '', FIELD_KIND_IMAGE, 20, true, true, ilTreeIcons, '0,1,2,3,4,5,6,7,8,9,10,11,12,100');
+        mngDatatable.AddConfigField( COL_CONFIG_PROJECT, 'icon', '', FIELD_KIND_IMAGE, 20, true, true, ilTreeIcons, '0,1,2,3,4,5,6,7,8,9,10,11,12,100');
+        mngDatatable.AddConfigField( COL_CONFIG_PROJECT, 'has_docs', '', FIELD_KIND_IMAGE, 20, true, true, ilHas_docs, '0,1');
+        mngDatatable.AddConfigField( COL_CONFIG_PROJECT, 'full_mark', 'Обозначение', FIELD_KIND_TEXT, 300);
+        mngDatatable.AddConfigField( COL_CONFIG_PROJECT, 'name', 'Наименование', FIELD_KIND_TEXT, 300);
+        mngDatatable.AddConfigField( COL_CONFIG_PROJECT, 'parent_kod', 'Тип', FIELD_KIND_TEXT, 50);
+        mngDatatable.AddConfigField( COL_CONFIG_PROJECT, 'kod', 'Продукция', FIELD_KIND_TEXT, 200);
+        mngDatatable.AddConfigField( COL_CONFIG_PROJECT, 'created', 'Создан', FIELD_KIND_TEXT, 50);
+        mngDatatable.AddConfigField( COL_CONFIG_PROJECT, 'user_name', 'Автор', FIELD_KIND_TEXT, 80);
+    end;
 
     fWelcome.Progress(10);
 
@@ -315,11 +364,11 @@ begin
     fWelcome.Progress(10);
 
     // отображаем текущую версию программы
-    Caption := Caption + ' (' + GetFileVersion() + ')';
+    SetCaption;
 
     fMain.KeyPreview := true;
 
-    // флаг для мгновенного обновления данных при изменении фильтрации столюца
+    // флаг для мгновенного обновления данных при изменении фильтрации столбца
     DBGridEhCenter.FilterEditCloseUpApplyFilter:=true;
 
     // прячем приветственное окно
@@ -336,21 +385,13 @@ begin
         AFont.Style := [fsBold, fsItalic];
 end;
 
-procedure TfMain.aSearchExecute(Sender: TObject);
-begin
-    pnNavigation.ActivePage := pageSearch;
-    bSearch.OnClick(self);
-end;
-
 procedure TfMain.bAddSectionClick(Sender: TObject);
-var
-    ChildId : integer;
 begin
     if not Assigned(fEditSection) then
        fEditSection := TfEditSection.Create(self);
 
     fEditSection.Mode := 0;  // создание раздела
-    fEditSection.ParentId := mngGroupTree.GetValue('child');
+    fEditSection.ParentId := mngGroupTree.GetValue('mem_child');
     fEditSection.ItemsKind := 0;
     fEditSection.SectionName := 'Новый раздел';
 
@@ -360,20 +401,19 @@ begin
         mngGroupTree.Expand;
 
         // создаем элемент в базе
-        ChildId :=
-            CreateNavigationObject(
-                fEditSection.NewParentId,            // родитель
-                0,                                   // раздел (будет создан новый)
-                'icon, kind, name',                  // набор заполняемых при создании полей
-                [
-                    fEditSection.NewItemsKind,       // тип допиконки
-                    KIND_SECTION,                    // основной тип объекта
-                    fEditSection.NewSectionName      // наименование объекта
-                ]
-            );
+        CreateNavigationObject(
+            fEditSection.NewParentId,            // родитель
+            0,                                   // раздел (будет создан новый)
+            'icon, kind, name',          // набор заполняемых при создании полей
+            [
+                fEditSection.NewItemsKind,       // тип допиконки
+                KIND_SECTION,                    // основной тип объекта
+                fEditSection.NewSectionName      // наименование объекта
+            ]
+        );
 
         // обновляем дерево
-        mngGroupTree.Refresh;
+        mngGroupTree.Refresh([]);
 
     end;
 end;
@@ -389,9 +429,12 @@ begin
 
 end;
 
+procedure TfMain.bRefreshClick(Sender: TObject);
+begin
+    mngSpecTree.Refresh([]);
+end;
+
 procedure TfMain.EditSection;
-var
-    doRefresh: boolean;
 begin
     if not Assigned(fEditSection) then
        fEditSection := TfEditSection.Create(self);
@@ -417,7 +460,7 @@ begin
         then mngData.ChangeObject( mngGroupTree.GetValue('child'), ['icon'], [fEditSection.NewItemsKind] );
 
         // перестраиваем дерево с сохранением текущего раскрытия веток
-        mngGroupTree.Refresh;
+        mngGroupTree.Refresh([]);
     end;
 end;
 
@@ -442,11 +485,17 @@ begin
         then mngData.ChangeLinkChild( LNK_NAVIGATION, mngGroupTree.GetValue('aChild'), fEditObject.NewObjectId );
 
         // перестраиваем дерево с сохранением текущего раскрытия веток
-        mngGroupTree.Refresh;
+        mngGroupTree.Refresh([]);
     end;
 end;
 
 procedure TfMain.sbAddObjectClick(Sender: TObject);
+begin
+    ( TfObjectCard.Create( self, OBJECT_CARD_MODE_CREATE, ObjectPageCardCallback ) ).Show;
+end;
+
+
+procedure TfMain.sbAddObject_Click(Sender: TObject);
 var
     ChildId : integer;
 begin
@@ -476,78 +525,87 @@ begin
             );
 
         // обновляем дерево
-        mngGroupTree.Refresh;
+        mngGroupTree.Refresh([]);
 
     end;
 
 end;
 
-procedure TfMain.sbCancelVersionClick(Sender: TObject);
-{ возвращаем взятый в редактирование документ без сохранения изменений.
-  при этом рабочая версия полностью удаляется }
+procedure TfMain.sbCreateProjectClick(Sender: TObject);
+/// нажатие на кнопку создания проекта. показываем форму. если еще не показана
+/// пока она показана, перемещение по дереву спецификаций отдает ей данные
+/// текущего элемента для автоматической подстановки в поле редактруемой проектом
+/// спецификации
 begin
 
-    // спрашиваем, уверен ли пользователь
-    if  Application.MessageBox(
-            'Вернуть документ из редактирования без сохранения изменений? Новая версия не будет создана.',
-            'Возврат без сохранения',
-            MB_YESNO + MB_ICONQUESTION
-        ) = ID_NO
-    then exit;
-
-    if not mngData.DeleteWorkDocument( grdDocs.DataSource.DataSet.FieldByName('child').AsInteger ) then
+    if not mngData.HasRole( ROLE_CREATE_PROJECT ) then
     begin
-        ShowMessage( Core.DM.DBError );
+        ShowMessage('Отсутствует роль создания проекта');
         exit;
     end;
 
-    // обновляем список документов
-    ShowSubItems;
+    if fAddProject.Visible then exit;
+
+    fAddProject.Reset;
+
+    fAddProject.callback := CreateProject;
+
+    fAddProject.Show;
+
+end;
+
+function TfMain.CreateProject(name, mark: string; objectId, workgroupId: integer; comment, parent_prod_kod, prod_kod: string): boolean;
+/// вызывается при нажатии на кнопку создать/редактировать формы создания проекта
+/// проверяет на возможность создания и создает проект. запускает режим
+/// редактирования объекта при успешном создании
+var
+    project_id: integer;
+begin
+
+    result := false;
+
+    // пытаемся создать проект
+    project_id := mngData.CreateProject( name, comment, mark, parent_prod_kod, prod_kod, objectId, workgroupId );
+    if project_id = 0 then
+    begin
+        ShowMessage( lW( CORE.DM.DBError ) );
+        exit;
+    end;
+
+    OpenProject( project_id, name, mark );
+
+    result := true;
 end;
 
 procedure TfMain.sbDelSectionClick(Sender: TObject);
 begin
     if  Application.MessageBox(
-            'Удалить документ со всеми файлами?',
+            'Удалить объект из дерева?',
             'Удаление',
             MB_YESNO + MB_ICONQUESTION
         ) = ID_NO
     then exit;
 
     // удаляем связку из базы
-    if not mngData.DeleteLink( LNK_NAVIGATION, mngGroupTree.GetValue('aChild'), DEL_MODE_FULL_USER ) then exit;
+    if not mngData.DeleteLink( LNK_NAVIGATION, mngGroupTree.GetValue('mem_aChild'), DEL_MODE_FULL_USER ) then exit;
 
     // обновляем дерево
-    mngGroupTree.Refresh;
+    mngGroupTree.Refresh([]);
+end;
+
+procedure TfMain.sbOpenCardClick(Sender: TObject);
+begin
+    ShowObjectCard;
+end;
+
+procedure TfMain.ObjectPageCardCallback;
+begin
+    ShowSubItems;
 end;
 
 procedure TfMain.sbOpenDocClick(Sender: TObject);
-{ открываем выбранный файл для просмотра на машине пользователя.
-
-  алгоритм:
-  - выгружаем файл в темповую папку в формате: имя_файла(версия).расширение
-  - пытаемся открыть настроеннй в системе программой
-}
-var
-    filename
-   ,DBname
-            : string;
-    dataset
-            : TDataSet;
 begin
-    // просто для сокращения формулировок
-    dataset := grdDocs.DataSource.DataSet;
-
-    // формируем имя
-    filename := ExtractFileName( dataSet.FieldByName('filename').AsString ) +
-                '(' + dataSet.FieldByName('version').AsString + ')' +
-                ExtractFileExt( dataSet.FieldByName('filename').AsString );
-
-    // выгружаем из базы под этим именем
-    mngData.GetFileFromStorage( DIR_TEMP, Filename, dataSet.FieldByName('fullname').AsString );
-
-    // пытаемся открыть
-    ShellExecute(0, 'open', PChar( DIR_TEMP + filename ), nil, nil, SW_SHOWNORMAL);
+    OpenFilePreview( grdDocs.DataSource.DataSet );
 end;
 
 procedure TfMain.sbOpenVersionDirClick(Sender: TObject);
@@ -557,194 +615,8 @@ procedure TfMain.sbOpenVersionDirClick(Sender: TObject);
 var
     path: string;
 begin
-    path := mngData.GetVersionPath( grdDocs.DataSource.DataSet.FieldByName('child').AsInteger );
+    path := mngData.GetVersionPath( grdDocs.DataSource.DataSet.FieldByName('mem_child').AsInteger );
     ShellExecute(Application.Handle, 'explore', PChar(path), nil, nil, SW_SHOWDEFAULT);
-end;
-
-procedure TfMain.sbOpenVersionFileClick(Sender: TObject);
-{ нажатие кнопки открытия файла в списке объектов для раздела
-  навигации "Документы в работе"  }
-var
-    path: string;
-begin
-    path := mngData.GetVersionPath( grdDocs.DataSource.DataSet.FieldByName('child').AsInteger, true );
-    ShellExecute(Application.Handle, 'open', PChar(path), nil, nil, SW_SHOWDEFAULT);
-end;
-
-procedure TfMain.sbSaveVersionClick(Sender: TObject);
-{ сохранение текущего состояния рабочего документа, как новой версии }
-label ext;
-var
-    filename: string;
-    dsDoc : TDataset;
-    hash: string;
-begin
-
-    lC('sbSaveVersionClick');
-
-    // спрашиваем, уверен ли пользователь
-    if  Application.MessageBox(
-            'Загрузить отредакированный документ в систему как новую версию?',
-            'Возврат с сохранением',
-            MB_YESNO + MB_ICONQUESTION
-        ) = ID_NO
-    then goto ext;
-
-    dsDoc := grdDocs.DataSource.DataSet;
-
-    filename := mngData.GetVersionPath( dsDoc.FieldByName('child').AsInteger, true );
-
-    if not FileExists(filename) then
-    begin
-        ShowMessage( lW( 'Рабочий файл версии отсутствует. Сохранение отменено.' + sLineBreak+ '(' + filename + ')'));
-        exit;
-    end;
-
-    hash := mngFile.GetHash( filename );
-    if hash = dsDoc.FieldByName('hash').AsString then
-    begin
-        ShowMessage( lW( 'В файл ' + ExtractFileName(filename) + ' не внесено изменений. Создание новой версии отменено.'));
-        goto ext;
-    end;
-
-    // показываем окно добавления документа в режиме следующей версии (нельзя править путь и имя документа)
-    if   not Assigned( fAddDoc )
-    then fAddDoc := TfAddDoc.Create(self);
-
-    fAddDoc.object_id   := dsDoc.FieldByName('parent').AsInteger;
-    fAddDoc.object_name :=
-        '(' + dsDoc.FieldByName('parent').AsString + ') ' +
-              dsDoc.FieldByName('object_name').AsString;
-    fAddDoc.filename    := filename;
-    fAddDoc.name        := dsDoc.FieldByName('filename').AsString;
-    fAddDoc.version_id  := dsDoc.FieldByName('child').AsInteger;
-    fAddDoc.version     := dsDoc.FieldByName('version').AsString;
-    fAddDoc.doc_type    := dsDoc.FieldByName('type').AsInteger;
-    fAddDoc.mode        := SAVE_MODE_NEW_VERSION; // добавление следующей версии
-    fAddDoc.callback    := fMain.SaveDocVersionCallback;
-
-    fAddDoc.Show;
-
-ext:
-    lCE;
-
-end;
-
-function TfMain.SaveDocVersionCallback(object_id, version_id, doc_type: integer; Name, ext, FileName, Comment: string): boolean;
-begin
-    result := false;
-
-    if not mngData.SaveWorkDocumentAsVersion( version_id ) then
-    begin
-        ShowMessage( Core.DM.DBError );
-        exit;
-    end;
-
-    // обновляем список документов
-    ShowSubItems;
-
-    result := true;
-end;
-
-procedure TfMain.sbTakeToWorkClick(Sender: TObject);
-{ забираем файл на редактирование под текущим пользователем. }
-label ext;
-begin
-    lC('TfMain.sbTakeToWorkClick');
-
-    // спрашиваем, уверен ли пользователь
-    if  Application.MessageBox(
-            'Взять документ в работу? Другие пользователи смогут его только просмотреть.',
-            'Взять в работу',
-            MB_YESNO + MB_ICONQUESTION
-        ) = ID_NO
-    then goto ext;
-
-    // берем документ в работу
-    if not mngData.TakeDocumentToWork( grdDocs.DataSource.DataSet.FieldByName('child').AsInteger ) then
-    begin
-        ShowMessage( Core.DM.DBError );
-        goto ext;
-    end;
-
-    // обновляем список документов
-    ShowSubItems;
-
-ext:
-    lCE;
-end;
-
-procedure TfMain.sbDeleteDocumentClick(Sender: TObject);
-{ метод удаляет документ (выбранную версию) у выбранного объекта.
-  фактически, документ остается в базе, просто скидывается в архив связка с объектом,
-  и при выборке за дату, когда связка была актуальна, документ снова будет отображен в списке.
-
-  Алгоритм:
-  - удаляем связку самого документа
-  - ищем привязанные к нему другие файлы, если он комплексный
-      - удаляем связки для них
-  - проверяем наличие неудаленных файлов привязанных к данному объекту
-  - при нулевом количестве, сбрасываем флаг налиция файла
-  -обновляем список документов
-}
-label ext;
-var
-    doc_id
-   ,link_id
-            : integer;
-    path
-            : string;
-begin
-    lC('sbDeleteDocumentClick');
-
-    // перед удалением документа в работе требуется его сохранить или отменить редактирование
-    // поскольку это твлияет на то, в каком сотоянии будет отображен этот документ при
-    // просмотре данных на указанный момент истории, когда он еще не был удален
-    if mngData.IsInWork( grdDocs.DataSource.Dataset.FieldByName('child').AsInteger ) OR
-       mngData.IsWorkVersion( grdDocs.DataSource.Dataset.FieldByName('child').AsInteger )
-    then
-    begin
-        ShowMessage('Удаление невозможно. Завершите работу с версией, для возможности удаления.');
-        goto ext;
-    end;
-
-    // спрашиваем, уверен ли пользователь
-    if  Application.MessageBox(
-            'Удалить документ со всеми вложенными (если есть)?',
-            'Удаление',
-            MB_YESNO + MB_ICONQUESTION
-        ) = ID_NO
-    then goto ext;
-
-    doc_id := grdObject.DataSource.Dataset.FieldByName('child').AsInteger;
-    link_id := grdDocs.DataSource.Dataset.FieldByName('link_id').AsInteger;
-
-    // удаляем основную связку из базы
-    if not mngData.DeleteLink( LNK_DOCUMENT_OBJECT, link_id, DEL_MODE_SINGLE + DEL_MODE_NO_CROSS ) then exit;
-{
-    // ищем документы привязанные к данному
-    if dataset.FieldByName('is_complex').AsInteger = 1 then
-    begin
-        if not dmOQ( Format( SQL_GET_SUBDOCS, [ dataset.FieldByName('child').AsInteger ] )) then goto ext;
-
-    end;
-}
-
-    // проверяем наличие привязанных файлов
-    mngData.UpdateHasDocsFlag( doc_id );
-
-    // обновляем список файлов
-    ShowSubItems;
-
-ext:
-    lCE;
-end;
-
-procedure TfMain.bSearchClick(Sender: TObject);
-begin
-
-     mngSearchTree.SetSQL('SELECT * FROM ' + VIEW_OBJECT + ' WHERE parent = name like ''%'+eValue.Text+'%''');
-
 end;
 
 procedure TfMain.OnGroupCellChange;
@@ -752,9 +624,7 @@ var
    isUserObject: boolean;
 begin
     // доступность кнопок редактирования/удаления разделов
-
     sbAddSection.Enabled := grdGroup.SelectedIndex <> -1;
-    sbAddObject.Enabled := grdGroup.SelectedIndex <> -1;
 
     isUserObject := StrToIntDef(grdGroup.Columns[GRP_COL_LUID].DisplayText, 0) = Core.User.id;
     sbEditSection.Enabled := isUserObject;
@@ -763,6 +633,45 @@ begin
     // показ списка подэлементов текущего выбранного в дереве элемента
     ShowSubItems;
 
+    // показ списка файлов выделенного объекта
+    RefreshFilePreview;
+
+    // если открыто окно создания проекта, передаем ему данные текущего выбранного
+    // элемента дерева спецификаций, чтобы подставить данные, если подойдут
+//    if   assigned(fAddProject)
+//    then fAddProject.SelectSpecification( grdSpecific.DataSource.DataSet );
+
+end;
+
+function TfMain.OpenProject(project_id: integer; pname, mark: string ): TForm;
+/// метод подгружает данные проекта по его id и открывает форму работы с ним
+var
+    i : integer;
+begin
+
+    result := nil;
+
+    // проверяем, не открыт ли уже такой проект
+    for i := 0 to High(wndArrProject) do
+    if Assigned(wndArrProject[i]) and (TfProject(wndArrProject[i]).ProjectID = project_id)
+    then result := wndArrProject[i];
+
+    if not Assigned(result) then
+    begin
+        result := TfProject.Create(self);
+        with TfProject(result) do
+        begin
+            ProjectID := project_id;
+            ProjectName := pname;
+            ProjectMark := mark;
+            Init;
+            Show;
+        end;
+
+        /// пишем в массив новое окно проекта
+        SetLength(wndArrProject, Length(wndArrProject)+1);
+        wndArrProject[High(wndArrProject)] := result;
+    end;
 end;
 
 procedure TfMain.pcObjectsChange(Sender: TObject);
@@ -776,166 +685,109 @@ begin
 end;
 
 procedure TfMain.ShowSubItems;
-{ исходя из текущего активного дерева, показываем в таблице список привязанных
-  элементов (всех подуровней) }
+/// исходя из текущего активного дерева, показываем в таблице список привязанных
+/// элементов (всех подуровней)
+var
+    config : string;
 begin
 
-    if   pnNavigation.ActivePage = pageGroups
-    then RefreshSubitems( VIEW_GROUP, LNK_NAVIGATION, StrToIntDef(grdGroup.Columns[GRP_COL_LID].DisplayText, 0) );
+    // получаем набор вложенных объектов из по дереву рабочего стола
+    if pnNavigation.ActivePage = pageGroups then
+    begin
+        grdObject.DataSource.DataSet :=
+             mngData.GetGroupSubitems(
+                 grdGroup.DataSource.DataSet.FieldByName('mem_child').AsInteger,
+                 grdGroup.DataSource.DataSet.FieldByName('mem_kind').AsInteger,
+                 'kind, icon, has_docs, mark, name, child, full_mark',
+                 grdObject.DataSource.DataSet
+             );
 
-    if   pnNavigation.ActivePage = pageSpecif
-    then RefreshSubitems( VIEW_OBJECT, LNK_STRUCTURE, StrToIntDef(grdSpecific.Columns[SPC_COL_LID].DisplayText, 0) );
+        // получаем список документов текущего элемента. если это раздел - у него может быть персональная выборка, это тоже учитывается
+        grdDocs.DataSource.DataSet :=
+            mngData.GetKDDocsList(
+                grdGroup.DataSource.DataSet.FieldByName('mem_child').AsInteger,
+                grdGroup.DataSource.DataSet.FieldByName('mem_kind').AsInteger,
+                grdDocs.DataSource.DataSet
+            );
 
-    if   pnNavigation.ActivePage = pageSearch
-    then RefreshSubitems( VIEW_OBJECT, LNK_STRUCTURE, StrToIntDef(grdSearch.Columns[SRH_COL_LID].DisplayText, 0) );
+        /// получаем настройки полей для таблицы вложенных элементов, исходя из выбранного в дереве навигации
+        config := mngData.GetColConfigName( grdGroup.DataSource.DataSet.FieldByName('mem_child').AsInteger, COL_CONFIG_DEF );
+        /// конфигурация не применена или отличается от последней примененной
+        if config <> fConfig then
+        begin
+            /// обновляем конфигурацию столбцов и запоминаем как последнюю примененную
+            mngDatatable.ApplyConfiguration( config, grdObject );
+            fConfig := config;
+        end;
 
+    end;
+
+    // получаем набор вложенных объектов из по дереву спецификаций
+    if   pnNavigation.ActivePage = pageSpecif then
+    begin
+        grdObject.DataSource.DataSet :=
+            mngData.GetSpecifSubitems(
+                grdSpecific.DataSource.DataSet.FieldByName('mem_child').AsInteger,
+                grdSpecific.DataSource.DataSet.FieldByName('mem_kind').AsInteger,
+                'kind, icon, has_docs, mark, name, count, child, full_mark',
+                grdObject.DataSource.DataSet
+            );
+
+        // получаем список документов текущего выбранного в списке объекта
+        grdDocs.DataSource.DataSet :=
+            mngData.GetKDDocsList(
+                grdObject.DataSource.DataSet.FieldByName('child').AsInteger,
+                grdObject.DataSource.DataSet.FieldByName('kind').AsInteger,
+                grdDocs.DataSource.DataSet
+            );
+    end;
 end;
 
 procedure TfMain.SpeedButton2Click(Sender: TObject);
 begin
     // допускается открытие неограниченного количества экземпляров справочника
-    (TfSpecTreeFree.Create(self, VIEW_OBJECT)).Show;
+    TfSpecTreeFree.Create(self, VIEW_OBJECT).Show;
 end;
 
 procedure TfMain.SpeedButton3Click(Sender: TObject);
 begin
-    (TfSpecTreeFree.Create(self, VIEW_GROUP)).Show;
+    TfSpecTreeFree.Create(self, VIEW_GROUP).Show;
 end;
 
-procedure TfMain.sbAddDocumentClick(Sender: TObject);
-begin
-    AddDocumentDialog;
-end;
-
-procedure TfMain.RefreshSubitems( ItemTable, LinkTable: string; id: integer);
-{ обновляем данные списка элементов, исходя из текущей выбранной связки (объекта)
-  и текущей открытой вкладке списка объектов
- }
-    procedure RefreshObjects;
-    var
-        mark_id: integer;
-        i: integer;
-        childs: string;
-    begin
-
-        // при обновлении списка запоминаем все выделенные элементы, чтобы восстановить после
-        if   Assigned(grdObject.DataSource.DataSet) and grdObject.DataSource.DataSet.Active
-        then mark_id := grdObject.DataSource.DataSet.FieldByName('child').AsInteger;
-
-        // переоткрываем таблицу
-        grdObject.DataSource.DataSet := mngData.GetObjectSubitems( id, ItemTable, LinkTable, grdObject.DataSource.DataSet );
-
-        // восстанавливаем выделение записей
-        if   Assigned(grdObject.DataSource.DataSet) and grdObject.DataSource.DataSet.Active
-        then grdObject.DataSource.DataSet.Locate('child', mark_id, []);
-
-    end;
-
-    procedure RefreshDocument;
-    var
-        mark_id: integer;
-    begin
-
-        // получаем данные всех документов, привязанных к текущему объекту
-        // {!} учесть получение документов для нескольких выделенных объектов
-
-        if   Assigned(grdDocs.DataSource.DataSet) and grdDocs.DataSource.DataSet.Active
-        then mark_id := grdDocs.DataSource.DataSet.FieldByName('child').AsInteger;
-
-        if   Assigned(grdObject.DataSource.DataSet) and grdObject.DataSource.DataSet.Active {and ( grdObject.DataSource.Dataset.RecordCount > 0 )} then
-        begin
-
-            // для вкладки навигации с документами в редактировании, берем список в привязке к разделу, а не объекту (поскольку их нет в разделе)
-            if   grdGroup.Columns[GRP_COL_NAME].DisplayText = SECTION_DOCUMENT_INWORK
-            then grdDocs.DataSource.DataSet := mngData.GetSectionDocsList( grdGroup.DataSource.DataSet.FieldByName('child').AsInteger, grdDocs.DataSource.DataSet )
-            else grdDocs.DataSource.DataSet := mngData.GetDocsList( grdObject.DataSource.DataSet.FieldByName('child').AsInteger, grdDocs.DataSource.DataSet );
-
-            if   Assigned(grdDocs.DataSource.DataSet) and grdDocs.DataSource.DataSet.Active
-            then grdDocs.DataSource.DataSet.Locate('child', mark_id, []);
-        end else
-            grdDocs.DataSource.DataSet.Close;
-
-        sbAddDocument.Enabled := Assigned( grdObject.DataSource.DataSet ) and ( grdObject.DataSource.DataSet.RecordCount > 0 );
-
-        sbDeleteDocument.Enabled := false;
-        sbOpenDoc.Enabled := false;
-
-        CheckButtons;
-
-    end;
-
-begin
-
-    RefreshObjects;
-    RefreshDocument;
-
-    // работа с видмостью вкладок, в зависимости от выбранного раздела в навигации
-
-    // закладка "объект" отображается во всех случаях, кроме выбора раздела "Документы в работе"
-    tsObjects.TabVisible :=
-        (pnNavigation.ActivePage <> pageGroups) or
-        ( not (grdGroup.Columns[GRP_COL_NAME].DisplayText = SECTION_DOCUMENT_INWORK) );
-
-{
-    case pcObjects.ActivePageIndex of
-        PAGE_OBJECTS : RefreshObjects;
-        PAGE_DOCUMENT : RefreshDocument;
-    end;
-}
-end;
-
-
-procedure TfMain.AddDocumentDialog;
+procedure TfMain.RefreshFilePreview;
 var
-   dataset: TDataSet;
+    dataset: TDataSet;
+    image: TImage;
+    filename : string;
 begin
 
-    dataset := grdObject.DataSource.DataSet;
+    dataset := grdDocs.DataSource.DataSet;
 
-    if   not DataSet.Active or ( DataSet.RecordCount = 0 ) then
-    begin
-        ShowMessage('Не выбран объект, привязка невозможна');
+    iPreview.Picture := nil;
+    mDocComment.Lines.Text := '';
+
+    if not Assigned(dataset) or
+       not dataset.Active or
+       (dataset.RecordCount = 0)
+    then
         exit;
+
+    mDocComment.Lines.Text := DataSet.FieldByName('doc_comment').AsString;
+
+
+    filename := DIR_PREVIEW + '(' + dataset.FieldByName('version').AsString + ')' + ChangeFileExt( dataset.FieldByName('filename').AsString, '.jpg');
+
+    if Not FileExists( filename ) then
+    begin
+        if mngData.GetFileFromStorage( DIR_PREVIEW, filename, dataset.FieldByName('GUID').AsString ) then
+        CreatePreview( DIR_PREVIEW, filename );
     end;
 
-    if   not Assigned( fAddDoc )
-    then fAddDoc := TfAddDoc.Create(self);
-
-    fAddDoc.object_id   := Dataset.FieldByName('child').AsInteger;
-    fAddDoc.object_name := '(' + Dataset.FieldByName('child').AsString + ') ' + Dataset.FieldByName('name').AsString;
-    fAddDoc.filename    := '';
-    fAddDoc.name        := '';
-    fAddDoc.version_id  := 0;
-    fAddDoc.version     := '1';
-    fAddDoc.mode        := SAVE_MODE_NEW_DOCUMENT; // добавление первой версии
-    fAddDoc.callback    := fMain.AddDocCallback;
-                           // замысел в том, что окно добавления файла не должно быть
-                           // блокирующим (модальным) и не должно содержать функционала
-                           // добавления документа, поскольку он может вызываться
-                           // отдельно от окна или быть разным в различных ситуациях
-                           // например, добавление первой версии нового документа, или
-                           // добавление/сохранение новой редакции документа находящегося в работе
-                           // все это решается методом callback-функции.
-
-    fAddDoc.Show;
+    // загрузка превьюшки, если есть
+    if   FileExists( filename )
+    then ShowPreview( filename );
 
 end;
-
-function TfMain.AddDocCallback(object_id, version_id, doc_type: integer; Name, ext, FileName, Comment: string): boolean;
-begin
-
-    result := false;
-
-    if   mngData.CreateDocumentVersion( object_id, version_id, doc_type, Name + ext, FileName, Comment ) = 0
-    then ShowMessage( Core.DM.DBError )
-    else
-        begin
-            fMain.OnGroupCellChange;
-            result := true;
-        end;
-
-end;
-
 
 procedure TfMain.Button2Click(Sender: TObject);
 var
@@ -957,15 +809,10 @@ var
    ,sec_assembly
    ,sec_complect
    ,sec_complex
+   ,sec_specif
             : integer;
 
    query1, query2: TADOQuery;
-
-   function AddSection(id, icon: integer; section: string): integer;
-   begin
-       result := mngData.AddObject('kind, name, icon', ['1', section, icon]);
-       mngData.AddLink( LNK_NAVIGATION, id, result, 0 );
-   end;
 
    procedure AddObjects(kind: integer; name: string);
    var i : integer;
@@ -984,103 +831,75 @@ begin
 
    ClearStructure;
 
-   // добавляем корневые разделы
-   izdid   := mngData.AddObject('kind, name', [ KIND_SECTION, 'Изделия' ]);
-   specid  := mngData.AddObject('kind, name', [ KIND_SECTION, 'Спецификации' ]);
-   blockid := mngData.AddObject('kind, name', [ KIND_SECTION, 'Сборочные единицы' ]);
+   CreateWorkTree;
 
-   mngData.AddLink( LNK_NAVIGATION, 0, izdid, 0 );
-   mngData.AddLink( LNK_STRUCTURE, 0, specid );
-   mngData.AddLink( LNK_STRUCTURE, 0, blockid );
-
-   // создаем и сразу привязываем корневые типизированные разделы дерева навигации
-   AddSection( 0, KIND_NONE,     SECTION_DOCUMENT_INWORK );
-   sec_detail   := AddSection( 0, KIND_DETAIL,   'Детали' );
-   sec_standart := AddSection( 0, KIND_STANDART, 'Стандартные изделия' );
-   sec_material := AddSection( 0, KIND_MATERIAL, 'Материалы' );
-   sec_other    := AddSection( 0, KIND_OTHER,    'Прочие изделия' );
-   sec_assembly := AddSection( 0, KIND_ASSEMBL,  'Сборочные единицы' );
-   sec_complect := AddSection( 0, KIND_COMPLECT, 'Комплекты' );
-   sec_complex  := AddSection( 0, KIND_COMPLEX,  'Комплексы' );
+   CreateStructTree( sec_specif, sec_assembly);
 
    // забиваем объекты в справочник
-   spec1  := mngData.AddObject('kind, name, mark', [ KIND_SPECIF, 'зав.7774', 'НПС5.01.02.100В' ]);
-   isp1_1 := mngData.AddObject('kind, name, mark', [ KIND_ISPOLN, 'зав.7774', 'НПС5.01.02.100В' ]);
-   isp1_2 := mngData.AddObject('kind, name, mark', [ KIND_ISPOLN, 'зав.7774', 'НПС5.01.02.100В-01' ]);
+   spec1  := mngData.AddObject('kind, icon, name, mark', [ KIND_COMPLEX, KIND_SPECIF, 'зав.7774', 'НПС5.01.02.100В' ], TBL_OBJECT);
+   isp1_1 := mngData.AddObject('kind, icon, name, mark', [ KIND_COMPLEX, KIND_ISPOLN, 'зав.7774', 'НПС5.01.02.100В' ], TBL_OBJECT);
+   isp1_2 := mngData.AddObject('kind, icon, name, mark, realization', [ KIND_COMPLEX, KIND_ISPOLN, 'зав.7774', 'НПС5.01.02.100В', '1' ], TBL_OBJECT);
+
 
    // спецификации и исполнения сразу подвязываем к дереву структуры
-   mngData.AddLink( LNK_STRUCTURE, specid, spec1 );
-   mngData.AddLink( LNK_STRUCTURE, spec1, isp1_1 );
-   mngData.AddLink( LNK_STRUCTURE, spec1, isp1_2 );
+//   mngData.AddLink( LNK_STRUCTURE, sec_specif, spec1 );
+//   mngData.AddLink( LNK_STRUCTURE, spec1, isp1_1 );
+//   mngData.AddLink( LNK_STRUCTURE, spec1, isp1_2 );
 
-   mngData.AddLink( LNK_NAVIGATION, izdid, spec1, 0 );
-   mngData.AddLink( LNK_NAVIGATION, spec1, isp1_1, 0 );
-   mngData.AddLink( LNK_NAVIGATION, spec1, isp1_2, 0 );
-
-   // привязка подразделов к исполнениям в навигации
-   query1 := Core.DM.OpenQueryEx('SELECT id FROM '+TBL_OBJECT+' WHERE kind = 11'); // все исполнения
-   // для каждого комплекса
-   while not query1.eof do
-   begin
-
-       mngData.AddLink( LNK_NAVIGATION, query1.FieldByName('id').AsInteger, sec_detail,   0 );
-       mngData.AddLink( LNK_NAVIGATION, query1.FieldByName('id').AsInteger, sec_standart, 0 );
-       mngData.AddLink( LNK_NAVIGATION, query1.FieldByName('id').AsInteger, sec_material, 0 );
-       mngData.AddLink( LNK_NAVIGATION, query1.FieldByName('id').AsInteger, sec_other,    0 );
-       mngData.AddLink( LNK_NAVIGATION, query1.FieldByName('id').AsInteger, sec_assembly, 0 );
-       mngData.AddLink( LNK_NAVIGATION, query1.FieldByName('id').AsInteger, sec_complect, 0 );
-       mngData.AddLink( LNK_NAVIGATION, query1.FieldByName('id').AsInteger, sec_complex,  0 );
-
-       query1.Next;
-   end;
 
    // накидываем сборочные единицы, сразу привязфвая к разделу "Сборочные единицы" дереву структуры
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.110В зав.7774', 'Дозатор' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.110В-01 зав.7774', 'Дозатор' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.120В зав.7774', 'Трубопровод напорный' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.130В зав.7774', 'Трубопровод подачи пенообразователя' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.130В-01 зав.7774', 'Трубопровод подачи пенообразователя' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.140В зав.7774', 'Устройство отборное' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.150В зав.7774', 'Трубопровод' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.160В зав.7774', 'Трубопровод' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.170В зав.7774', 'Трубопровод' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.200В зав.7774', 'Ёмкость' ]) );
-   mngData.AddLink( LNK_STRUCTURE, blockid, mngData.AddObject('kind, mark, name', [ KIND_ASSEMBL, 'НПС5.01.02.200В-01 зав.7774', 'Ёмкость' ]) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.110В', 'Дозатор' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name, realization', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.110В', 'Дозатор', '1' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.120В', 'Трубопровод напорный' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.130В', 'Трубопровод подачи пенообразователя' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name, realization', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.130В', 'Трубопровод подачи пенообразователя', '1' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.140В', 'Устройство отборное' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.150В', 'Трубопровод' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.160В', 'Трубопровод' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.170В', 'Трубопровод' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.200В', 'Ёмкость' ], TBL_OBJECT) );
+   mngData.AddLink( LNK_STRUCTURE, sec_assembly, mngData.AddObject('kind, icon, mark, name, realization', [ KIND_ASSEMBL, KIND_ISPOLN, 'НПС5.01.02.200В', 'Ёмкость', '1' ], TBL_OBJECT) );
 
    // накидываем детали
-   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, '814-17.2.04.00.007 зав.4378', 'Штуцер' ]);
-   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, '2013.136.00.007', 'Прокладка' ]);
-   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, '2013.136.01.012', 'Скоба' ]);
-   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'НПС5.01.02.101В зав.7774', 'Патрубок' ]);
-   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'НПС5.01.02.101В-01 зав.7774', 'Патрубок' ]);
-   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'НПС5.01.02.102В зав.7774', 'Патрубок' ]);
-   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'НПС5.01.02.103В зав.7774', 'Табличка' ]);
-   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'НПС5.02.02.101В зав.6953', 'Отвод' ]);
-   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'РЗ.81.44.000-23', 'Прокладка тип А ГОСТ 15180-86' ]);
+   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, '814-17.2.04.00.007', 'Штуцер' ], TBL_OBJECT);
+   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, '2013.136.00.007', 'Прокладка' ], TBL_OBJECT);
+   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, '2013.136.01.012', 'Скоба' ], TBL_OBJECT);
+   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'НПС5.01.02.101В', 'Патрубок' ], TBL_OBJECT);
+   mngData.AddObject('kind, mark, name, realization', [ KIND_DETAIL, 'НПС5.01.02.101В', 'Патрубок', '1' ], TBL_OBJECT);
+   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'НПС5.01.02.102В', 'Патрубок' ], TBL_OBJECT);
+   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'НПС5.01.02.103В', 'Табличка' ], TBL_OBJECT);
+   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'НПС5.02.02.101В', 'Отвод' ], TBL_OBJECT);
+   mngData.AddObject('kind, mark, name', [ KIND_DETAIL, 'РЗ.81.44.000-23', 'Прокладка тип А ГОСТ 15180-86' ], TBL_OBJECT);
 
    // накидываем стандартные изделия
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Винт с шестигранной головкой ГОСТ Р ИСО 4017-М12х40-5.6' ]);
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Гайка АМ16-6Н.35.III.3.019 ГОСТ 9064-75' ]);
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Гайка шестигранная нормальная ГОСТ ISO 4032-М12-8-А3А' ]);
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Фланец 50-16-01-В-Ст09Г2СГОСТ 33259-2015' ]);
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шпилька М165-6gx100 ГОСТ 22042-76' ]);
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шпилька М16-6gх300.58.019ГОСТ 22042-76' ]);
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Заклепка 2,5х7.00ГОСТ 10299-80' ]);
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шайба А.16.01.08кп.016 ГОСТ 11371-78' ]);
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шпилька АМ16-6gx95.32.35.III.2.019 ГОСТ 9066-75' ]);
-   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шпилька АМ16-6gх70.32.35.III.2.019 ГОСТ 9066-75 номенкл. №1083079' ]);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Винт с шестигранной головкой ГОСТ Р ИСО 4017-М12х40-5.6' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Гайка АМ16-6Н.35.III.3.019 ГОСТ 9064-75' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Гайка шестигранная нормальная ГОСТ ISO 4032-М12-8-А3А' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Фланец 50-16-01-В-Ст09Г2СГОСТ 33259-2015' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шпилька М165-6gx100 ГОСТ 22042-76' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шпилька М16-6gх300.58.019ГОСТ 22042-76' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Заклепка 2,5х7.00ГОСТ 10299-80' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шайба А.16.01.08кп.016 ГОСТ 11371-78' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шпилька АМ16-6gx95.32.35.III.2.019 ГОСТ 9066-75' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_STANDART, 'Шпилька АМ16-6gх70.32.35.III.2.019 ГОСТ 9066-75 номенкл. №1083079' ], TBL_OBJECT);
 
    // прочие изделия
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Воздухоотводчик авт.прямой 1/2 номенкл. №755855' ]);
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Датчик расхода ДРС-25МИ,исполнение: с индикацией, 6,3 МПа (кабельный ввод КНВМ1М-20), КМЧ для ДРС-25М на Рр 2,5 МПа, согласно опросному листу №0618/18 от 28.07.2018 номенкл. №1160137' ]);
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Клапан обратный межфланцевый лепестковыйWB 26 Ду 50 Ру 16 кгс/см2номенкл. №1031654' ]);
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Клапан отсекающий VT.539.N.04 1/2" номенкл. №751589' ]);
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Кран шаровой муфтовый ЗАРД 025.016.10-03Р ХЛ1 DN 25 PN 16 кгс/см2 ТУ 3742-002-52838824-2006  номенкл. №:1040810' ]);
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Манометр КМ22Р (6 кПа)-М20-1,5 ТУ 4212-002-4719015564-2008номенкл. №1225261' ]);
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Манометр МП3-У 0...16 кгс/см2 ТУ 311-00225621.167-97' ]);
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Манометр МП3-УУ2-(0...1)кгс/см2-1,5 М20х1,5радиальный без фланца ТУ 25-02.180335-84 номенкл. №1220625' ]);
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Переход К 57х5-32х4 ГОСТ 17378-2001 номенкл. №1062104' ]);
-   mngData.AddObject('kind, name', [ KIND_OTHER, 'Фланец 2-032-40 ГОСТ 12821-80' ]);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Воздухоотводчик авт.прямой 1/2 номенкл. №755855' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Датчик расхода ДРС-25МИ,исполнение: с индикацией, 6,3 МПа (кабельный ввод КНВМ1М-20), КМЧ для ДРС-25М на Рр 2,5 МПа, согласно опросному листу №0618/18 от 28.07.2018 номенкл. №1160137' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Клапан обратный межфланцевый лепестковыйWB 26 Ду 50 Ру 16 кгс/см2номенкл. №1031654' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Клапан отсекающий VT.539.N.04 1/2" номенкл. №751589' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Кран шаровой муфтовый ЗАРД 025.016.10-03Р ХЛ1 DN 25 PN 16 кгс/см2 ТУ 3742-002-52838824-2006  номенкл. №:1040810' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Манометр КМ22Р (6 кПа)-М20-1,5 ТУ 4212-002-4719015564-2008номенкл. №1225261' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Манометр МП3-У 0...16 кгс/см2 ТУ 311-00225621.167-97' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Манометр МП3-УУ2-(0...1)кгс/см2-1,5 М20х1,5радиальный без фланца ТУ 25-02.180335-84 номенкл. №1220625' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Переход К 57х5-32х4 ГОСТ 17378-2001 номенкл. №1062104' ], TBL_OBJECT);
+   mngData.AddObject('kind, name', [ KIND_OTHER, 'Фланец 2-032-40 ГОСТ 12821-80' ], TBL_OBJECT);
+
+   // материалы
+//   mngData.AddObject('kind, name', [ KIND_MATERIAL, 'Лист Б-ПН-О-1,5x1250x2500 ГОСТ 19904-90/ОК360В-4-IV-Ст3 ГОСТ 16523-97' ], TBL_OBJECT);
+//   mngData.AddObject('kind, name', [ KIND_MATERIAL, 'Проволока 3-12Х18Н10Т ГОСТ 18143-72' ], TBL_OBJECT);
+//   mngData.AddObject('kind, name', [ KIND_MATERIAL, 'Сетка Р4-1,6 ГОСТ 3306-88' ], TBL_OBJECT);
+//   mngData.AddObject('kind, name', [ KIND_MATERIAL, 'Мастика ГНС ГОСТ 14791-79' ], TBL_OBJECT);
 
    // генерим непрямые ссылки
    query1 := Core.DM.OpenQueryEx('SELECT id FROM '+LNK_STRUCTURE);
@@ -1099,55 +918,25 @@ begin
    end;
 
    ShowSubItems;
-   mngSpecTree.Refresh;
-   mngGroupTree.Refresh;
+   mngSpecTree.Refresh([]);
+   mngGroupTree.Refresh([]);
 
    ShowMessage('Генерация завершена');
 end;
 
-procedure TfMain.Button3Click(Sender: TObject);
-begin
-    Form2.SHow;
-end;
-
 procedure TfMain.Button4Click(Sender: TObject);
+var
+  a,b:integer;
 begin
    ClearStructure;
+
+   CreateWorkTree;
+   CreateStructTree(a,b);
+
    ShowSubItems;
-   mngSpecTree.Refresh;
-   mngGroupTree.Refresh;
-end;
+   mngSpecTree.Refresh([]);
+   mngGroupTree.Refresh([]);
 
-procedure TfMain.CheckButtons;
-var
-   filename : string;
-   docs_enabled
-  ,is_work_version
-  ,is_in_work
-           : boolean;
-begin
-    // прикрутить проверку прав
-    docs_enabled := Assigned(grdDocs.DataSource.DataSet) AND grdDocs.DataSource.DataSet.Active and ( grdDocs.DataSource.DataSet.RecordCount > 0 );
-    is_work_version := mngData.IsWorkVersion(grdDocs.DataSource.DataSet.FieldByName('child').AsInteger);
-    is_in_work := mngData.IsInWork( grdDocs.DataSource.DataSet.FieldByName('child').AsInteger );
-
-    sbDeleteDocument.Enabled := docs_enabled AND not is_in_work AND not is_work_version;
-    sbOpenDoc.Enabled := docs_enabled;
-    sbTakeToWork.Enabled := docs_enabled AND not is_in_work;
-    sbSaveWorkVersion.Enabled := is_work_version AND docs_enabled;
-    sbSaveVersion.Enabled := is_work_version AND docs_enabled;
-    sbCancelVersion.Enabled := is_work_version AND docs_enabled;
-
-    if docs_enabled then
-    begin
-        filename := mngData.GetVersionPath( grdDocs.DataSource.DataSet.FieldByName('child').AsInteger, true );
-        sbOpenVersionFile.Enabled := FileExists( filename );
-        sbOpenVersionDir.Enabled := sbOpenVersionFile.Enabled;
-    end else
-    begin
-        sbOpenVersionFile.Enabled := false;
-        sbOpenVersionDir.Enabled := false;
-    end;
 end;
 
 function TfMain.CreateNavigationObject(parent, child: integer; fields: string; values: array of variant): integer;
@@ -1160,7 +949,7 @@ begin
     else
     begin
         // добавляем новый объект
-        result := mngData.AddObject( fields, values );
+        result := mngData.AddObject( fields, values, TBL_OBJECT );
         if result = 0 then
         begin
             ShowMessage( 'Не удалось добавить объект.' );
@@ -1189,64 +978,29 @@ end;
 procedure TfMain.grdDocsApplyFilter(Sender: TObject);
 { при изменении фильтрации, перебираем все столбцы и склеиваем общую строку
   фильтра для датасета }
-var
-    filter, oper : string;
-    i: integer;
 begin
     (Sender as TDBGridEh).DataSource.DataSet.Filter :=
         mngDatatable.GetFilterByColumns( Sender as TDBGridEh );
-{
-    oper := '';
-    filter := '';
-
-    for I := 0 to grdDocs.Columns.Count-1 do
-    if grdDocs.Columns[i].STFilter.ExpressionStr <> '' then
-    begin
-        filter := filter + oper + grdDocs.Columns[i].STFilter.DataField + grdDocs.Columns[i].STFilter.ExpressionStr;
-        oper := ' and ';
-    end;
-    grdDocs.DataSource.DataSet.Filter := filter;
-}
 end;
 
 procedure TfMain.grdDocsCellClick(Column: TColumnEh);
 begin
-    CheckButtons;
+     RefreshFilePreview;
 end;
 
-procedure TfMain.grdDocsCheckRowHaveDetailPanel(Sender: TCustomDBGridEh;
-  var RowHaveDetailPanel: Boolean);
+procedure TfMain.grdDocsDblClick(Sender: TObject);
 begin
-//    grdDocs.RowDetailPanel.Visible := true;
+    OpenFilePreview( grdDocs.DataSource.DataSet );
 end;
 
-procedure TfMain.grdDocsRowDetailPanelShow(Sender: TCustomDBGridEh;
-  var CanShow: Boolean);
-var
-    jpg : TJPEGImage;
-    dataset: TDataSet;
-
-    function GetColumn(name: string): TColumnEh;
-    var
-        i: integer;
-    begin
-        for I := 0 to grdDocs.Columns.Count-1 do
-            if grdDocs.Columns[i].FieldName = name then result := grdDocs.Columns[i];
-    end;
+procedure TfMain.SetCaption;
 begin
+    Caption := 'PDM Нефтемаш ' + '(' + GetFileVersion() + ') ' + '(' + CORE.User.name + ') ';
+end;
 
-    dataset := grdDocs.DataSource.DataSet;
-
-    lAutor.Caption         := DataSet.FieldByName('autor_fio').AsString;
-    lEditor.Caption        := DataSet.FieldByName('work_fio').AsString;
-    mDocComment.Lines.Text := DataSet.FieldByName('comment').AsString;
-
-    // заполнение списка вложеных файлов
-    lbDocSupportFiles.Items.Clear;
-
-    // загрузка превьюшки, если есть
-    ShowPreview( DIR_PREVIEW + '(' + dataset.FieldByName('version').AsString + ')' + ChangeFileExt( dataset.FieldByName('name').AsString, '.jpg' ) );
-
+procedure TfMain.ShowObjectCard;
+begin
+    TfObjectCard.Create( self, OBJECT_CARD_MODE_VIEW, ObjectPageCardCallback, grdObject.DataSource.DataSet ).Init.Show;
 end;
 
 procedure TfMain.ShowPreview(filename: string);
@@ -1289,11 +1043,11 @@ begin
 
     dataset := grdDocs.DataSource.Dataset;
 
-    if mngData.GetFileFromStorage( DIR_TEMP, '('+ dataset.FieldByName('version').AsString +')' + dataset.FieldByName('name').AsString, dataset.FieldByName('fullname').AsString ) then
+    if mngData.GetFileFromStorage( DIR_TEMP, '('+ dataset.FieldByName('version').AsString +')' + dataset.FieldByName('filename').AsString, dataset.FieldByName('fullname').AsString ) then
 
-    CreatePreview( DIR_TEMP, '('+ dataset.FieldByName('version').AsString +')' + dataset.FieldByName('name').AsString );
+    CreatePreview( DIR_TEMP, '('+ dataset.FieldByName('version').AsString +')' + dataset.FieldByName('filename').AsString );
 
-    ShowPreview( DIR_PREVIEW + '('+ dataset.FieldByName('version').AsString +')' + ChangeFileExt( dataset.FieldByName('name').AsString, '.jpg' ));
+    ShowPreview( DIR_PREVIEW + '('+ dataset.FieldByName('version').AsString +')' + ChangeFileExt( dataset.FieldByName('filename').AsString, '.jpg' ));
 end;
 
 function TfMain.CreatePreview( path, filename: string ): boolean;
@@ -1304,7 +1058,7 @@ begin
     if FileExists( path + filename ) then
     begin
         image := TImage.Create(nil);
-        image.Picture.Bitmap.Handle := mngFile.GetThumbnailImage( DIR_TEMP + filename, 400, 400);
+        image.Picture.Bitmap.Handle := mngFile.GetThumbnailImage( DIR_TEMP + filename, IMAGE_PREVWIEW_SIZE, IMAGE_PREVWIEW_SIZE);
 
         jpg:=TJPEGImage.Create();
         jpg.Assign(image.Picture.Graphic);
@@ -1316,9 +1070,35 @@ begin
     end;
 end;
 
+function TfMain.CreateStructTree(var SpecSection, AssSecttion: integer): integer;
+begin
+   SpecSection := mngData.AddObject('kind, name', [ KIND_SECTION, SECTION_SPECIF ], TBL_OBJECT);
+   AssSecttion := mngData.AddObject('kind, name', [ KIND_SECTION, SECTION_ASSEMBLY ], TBL_OBJECT);
+
+   mngData.AddLink( LNK_STRUCTURE, 0, SpecSection );
+   mngData.AddLink( LNK_STRUCTURE, 0, AssSecttion );
+end;
+
 procedure TfMain.grdGroupCellClick(Column: TColumnEh);
 begin
     OnGroupCellChange;
+end;
+
+procedure TfMain.grdGroupColumns0CellButtons0Down(Sender: TObject;
+  TopButton: Boolean; var AutoRepeat, Handled: Boolean);
+begin
+    (sender as TDBGridCellButtonEh).DropdownMenu := nil;
+
+    // выбран раздел документы в работе
+    if   ( grdGroup.Columns[GRP_COL_NAME].DisplayText = SECTION_PROJECT_ALL ) or
+         ( grdGroup.Columns[GRP_COL_NAME].DisplayText = SECTION_PROJECT_MY )
+    then (sender as TDBGridCellButtonEh).DropdownMenu := popNavWorkObjects;
+
+    // выбран раздел избранного
+    if   grdGroup.Columns[GRP_COL_NAME].DisplayText = SECTION_FAVORITE
+    then (sender as TDBGridCellButtonEh).DropdownMenu := popNavFavorite;
+
+
 end;
 
 procedure TfMain.grdGroupDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -1337,9 +1117,17 @@ begin
     coord := TargetGrid.MouseCoord(X, Y);
     TargetGrid.DataSource.DataSet.RecNo := coord.y + 1;
 
+
+    /// в разных источниках разное именование поля с id перемещаемого объекта
     if   Assigned(SourceGrid.DataSource.DataSet.Fields.FindField('child'))
-    then child_id := SourceGrid.DataSource.DataSet.FieldByName('child').AsInteger
-    else child_id := SourceGrid.DataSource.DataSet.FieldByName('id').AsInteger;
+    then child_id := SourceGrid.DataSource.DataSet.FieldByName('child').AsInteger;
+
+    if   Assigned(SourceGrid.DataSource.DataSet.Fields.FindField('id'))
+    then child_id := SourceGrid.DataSource.DataSet.FieldByName('id').AsInteger;
+
+    if   Assigned(SourceGrid.DataSource.DataSet.Fields.FindField('mem_child'))
+    then child_id := SourceGrid.DataSource.DataSet.FieldByName('mem_child').AsInteger;
+
 
     parent_id := TargetGrid.DataSource.DataSet.FieldByName('child').AsInteger;
 
@@ -1360,7 +1148,7 @@ begin
         if   Core.DM.ADOConnection.InTransaction
         then Core.DM.ADOConnection.CommitTrans;
 
-    mngGroupTree.Refresh;
+    mngGroupTree.Refresh([]);
 end;
 
 procedure TfMain.grdGroupDragOver(Sender, Source: TObject; X, Y: Integer;
@@ -1380,6 +1168,11 @@ begin
         mngDatatable.GetFilterByColumns( Sender as TDBGridEh );
 end;
 
+procedure TfMain.grdObjectCellClick(Column: TColumnEh);
+begin
+    OnGroupCellChange;
+end;
+
 procedure TfMain.grdObjectColumns3CellButtons0Click(Sender: TObject;
   var Handled: Boolean);
 { нажатие кнопки открытия папки с документом в списке объектов для раздела
@@ -1390,6 +1183,12 @@ var
 begin
     path := mngData.GetVersionPath( grdObject.DataSource.DataSet.FieldByName('child').AsInteger );
     ShellExecute(Application.Handle, 'explore', PChar(path), nil, nil, SW_SHOWDEFAULT);
+end;
+
+procedure TfMain.grdObjectColumns3CellButtons0Down(Sender: TObject;
+  TopButton: Boolean; var AutoRepeat, Handled: Boolean);
+begin
+    (sender as TDBGridCellButtonEh).DropdownMenu := popObject;
 end;
 
 procedure TfMain.grdObjectColumns5CellButtons0GetEnabledState(
@@ -1417,6 +1216,41 @@ procedure TfMain.grdObjectColumns6CellButtons0GetEnabledState(
 begin
     ButtonEnabled :=
         FileExists( mngData.GetVersionPath( grdObject.DataSource.DataSet.FieldByName('child').AsInteger, true ) );
+end;
+
+procedure TfMain.grdObjectDblClick(Sender: TObject);
+/// двойной щелчок на объекте в списке. производим действия, исходя из его типа
+///    - папка - ничего
+///    - проект - открываем режим проекта
+///    - объект - открываем карточку
+///    - файл - открываем для просмотра
+var
+    dataset : TDataset;
+begin
+
+    dataset := grdObject.DataSource.DataSet;
+
+    // отсекаем некорректный датасет
+    if not Assigned(dataset) or
+       not dataset.Active or
+       (dataset.RecordCount = 0) or
+       not Assigned( dataset.FindField('kind')) or
+       not Assigned( dataset.FindField('child'))
+    then
+        exit;
+
+    // выбираем действие исходя из типа объекта
+    case dataset.FieldByName('kind').AsInteger of
+        KIND_PROJECT  :
+        begin
+            OpenProject(   dataset.FieldByName('child').AsInteger,
+                           dataset.FieldByName('name').AsString,
+                           dataset.FieldByName('mark').AsString
+                        ).BringToFront;
+        end;
+        KIND_SECTION  : {nothing};
+        else           ShowObjectCard;
+    end;
 end;
 
 procedure TfMain.grdObjectDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -1454,7 +1288,7 @@ begin
         if   Core.DM.ADOConnection.InTransaction
         then Core.DM.ADOConnection.CommitTrans;
 
-    mngSpecTree.Refresh;
+    mngSpecTree.Refresh([]);
     ShowSubItems;
 end;
 
@@ -1479,6 +1313,8 @@ var
   ,parent_id
            : integer;
 begin
+{    fMain.Cursor := crHourGlass;
+
     TargetGrid := (Sender as TDBGridEh);
     SourceGrid := (Source as TDBGridEh);
 
@@ -1490,6 +1326,8 @@ begin
     else child_id := SourceGrid.DataSource.DataSet.FieldByName('id').AsInteger;
 
     parent_id := TargetGrid.DataSource.DataSet.FieldByName('child').AsInteger;
+
+//    mngData.AddLink( LNK_STRUCTURE, parent_id, child_id );
 
     if not Core.DM.ADOConnection.InTransaction
     then   Core.DM.ADOConnection.BeginTrans;
@@ -1508,18 +1346,94 @@ begin
         if   Core.DM.ADOConnection.InTransaction
         then Core.DM.ADOConnection.CommitTrans;
 
+    mngSpecTree.Expand;
     mngSpecTree.Refresh;
+
+    fMain.Cursor := crDefault;
+}
 end;
 
-procedure TfMain.grdSpecificDragOver(Sender, Source: TObject; X, Y: Integer;
-  State: TDragState; var Accept: Boolean);
+procedure TfMain.menuGroupEditClick(Sender: TObject);
 begin
-    Accept := true;
+    if not mngData.HasRole( ROLE_ROLES_CONFIGURE ) then
+    begin
+        ShowMessage('Отсутствует роль редактирования групп ролей');
+        exit;
+    end;
+
+    if not Assigned(fRolesEditor) then
+    fRolesEditor := TfRolesEditor.Create(self);
+
+    fRolesEditor.Show;
 end;
 
-procedure TfMain.menuAddDocumentClick(Sender: TObject);
+procedure TfMain.menuProgrammHelpClick(Sender: TObject);
 begin
-    AddDocumentDialog;
+    ShellExecute(0, 'open', PChar( DIR_SHARED + FILE_NAME_PROGRAMM_HELP ), nil, nil, SW_SHOWNORMAL);
+end;
+
+procedure TfMain.menuUserChangeClick(Sender: TObject);
+begin
+    if not mngData.HasRole( ROLE_SET_CURRENT_USER ) then
+    begin
+        ShowMessage('Отсутствует роль смены пользователя');
+        exit;
+    end;
+
+    if not Assigned(wndUserList)
+    then
+        wndUserList := TfUserList.Create(self).SetCallback(ChangeUser)
+    else
+        wndUserList.BringToFront;
+
+    wndUserList.Show;
+
+end;
+
+function TfMain.ChangeUser( user_id: integer ): string;
+/// обработчик выбора пользователя из списка.
+/// пользователь выбирается из двойным кликом списка формы TfUserList
+begin
+    result := '';
+
+    if user_id <> 0 then
+    begin
+        // подменяем текущего пользователя
+        Core.User.initUserByID( user_id );
+
+        lM('Выбран новый пользователь: ' + Core.User.name );
+
+        // принудительное обновление данных о его правах
+        mngData.RefreshRolesList( true );
+
+        SetCaption;
+    end;
+
+end;
+
+procedure TfMain.menuWorkgroupEditClick(Sender: TObject);
+begin
+    if not mngData.HasRole( ROLE_WORKGROUPS_CONFIGURE ) then
+    begin
+        ShowMessage('Отсутствует роль редактирования рабочих групп');
+        exit;
+    end;
+
+    if not Assigned(fWorkgroupEditor) then
+    fWorkgroupEditor := TfWorkgroupEditor.Create(self);
+
+    fWorkgroupEditor.Show;
+end;
+
+procedure TfMain.N16Click(Sender: TObject);
+begin
+    ShellExecute(0, 'open', PChar( DIR_SHARED + FILE_NAME_VERSION_CHANGE ), nil, nil, SW_SHOWNORMAL);
+end;
+
+procedure TfMain.N7Click(Sender: TObject);
+/// получение актуальных данных о ролях из базы
+begin
+    mngData.RefreshRolesList( true );  // принудительное обновление данных
 end;
 
 procedure TfMain.aAdminPanelExecute(Sender: TObject);
@@ -1570,50 +1484,134 @@ begin
     RemoveEmptyDir( DIR_DOCUMENT );
 end;
 
+procedure TfMain.ClearProjectWndLink(form: TForm);
+/// метод вызывается при закрытии формы проекта, чтобы убрать ссылку на него
+/// из массива открытых, что позволит создать новую фому при необходлимости
+var
+    i: integer;
+begin
+    for I := 0 to High(wndArrProject) do
+    if wndArrProject[i] = form
+    then wndArrProject[i] := nil;
+end;
+
 procedure TfMain.ClearStructure;
 begin
    dmEQ('DELETE FROM '+TBL_OBJECT);
+   dmEQ('DELETE FROM '+TBL_OBJECT + '_history');
 
    // структура изделий
    dmEQ('DELETE FROM '+LNK_STRUCTURE);
    dmEQ('DELETE FROM '+LNK_STRUCTURE+'_cross');
-//   dmEQ('DELETE FROM '+LNK_STRUCTURE+'_cross_history');
    dmEQ('DELETE FROM '+LNK_STRUCTURE+'_history');
 
    // сруктура навигации
    dmEQ('DELETE FROM '+LNK_NAVIGATION);
    dmEQ('DELETE FROM '+LNK_NAVIGATION+'_cross');
-   dmEQ('DELETE FROM '+LNK_NAVIGATION+'_cross_history');
    dmEQ('DELETE FROM '+LNK_NAVIGATION+'_history');
 
    // таблицы работы с документами
    dmEQ('DELETE FROM '+TBL_DOCUMENT_EXTRA);
-   dmEQ('DELETE FROM '+LNK_DOCUMENT_COMPLEX);
-   dmEQ('DELETE FROM '+LNK_DOCUMENT_OBJECT);
-   dmEQ('DELETE FROM '+LNK_DOCUMENT_OBJECT+'_history');
-   dmEQ('DELETE FROM '+LNK_DOCUMENT_VERSION);
-   dmEQ('DELETE FROM '+LNK_DOCUMENT_INWORK);
+
+   // проекты
+   dmEQ('DELETE FROM '+TBL_PROJECT);
+   dmEQ('DELETE FROM '+LNK_PROJECT_STRUCTURE);
+   dmEQ('DELETE FROM '+LNK_PROJECT_STRUCTURE+'_cross');
+   dmEQ('DELETE FROM '+TBL_PROJECT_EXTRA);
+   dmEQ('DELETE FROM '+LNK_PROJECT_EXTRA);
+   dmEQ('DELETE FROM '+TBL_PROJECT_OBJECT_EXTRA);
+   dmEQ('DELETE FROM '+LNK_PROJECT_OBJECT_EXTRA);
+   dmEQ('DELETE FROM '+LNK_PROJECT_EDITOR);
+   dmEQ('DELETE FROM '+LNK_PROJECT_CHECKER);
 
    // хранилище документов
    dmEQ('DELETE FROM '+TBL_FILE);
+
+   dmEQ('DELETE FROM '+TBL_CUSTOM_SQL);
 end;
 
+procedure TfMain.CreateWorkTree;
+var
+   tmpID
+  ,tmpID2
+           : integer;
+   q0, q1: TDataset; // данные соответствующего уровня дерева классификатора продукции
 
-procedure TfMain.Button1Click(Sender: TObject);
+   function AddSection(id, icon: integer; section: string): integer;
+   begin
+       result := mngData.AddObject('kind, name, icon', ['1', section, icon], TBL_OBJECT);
+       mngData.AddLink( LNK_NAVIGATION, id, result, 0 );
+   end;
+
+begin
+
+   // создаем и сразу привязываем корневые типизированные разделы дерева навигации
+   mngData.AddSection(0, SECTION_DOCUMENTS, TAG_SELECT_DOCUMENTS, VIEW_DOCUMENT_KD, '', COL_CONFIG_DEF, 0 );
+
+   tmpID := mngData.AddSection( 0, SECTION_DOCUMENT_INWORK, TAG_SELECT_DOCUMENTS, VIEW_DOCUMENT_PROJECT, 'minor_version IS NOT NULL', COL_CONFIG_DEF, 0 );
+   mngData.AddSection( tmpID, SECTION_DOCUMENT_MY, TAG_SELECT_DOCUMENTS, VIEW_DOCUMENT_PROJECT, 'autor_id = #USER_ID# AND minor_version IS NOT NULL', COL_CONFIG_DEF, 0 );
+   mngData.AddSection( tmpID, SECTION_DOCUMENT_OTHER, TAG_SELECT_DOCUMENTS, VIEW_DOCUMENT_PROJECT, 'autor_id <> #USER_ID# AND minor_version IS NOT NULL', COL_CONFIG_DEF, 0 );
+
+   tmpID := mngData.AddSection( 0, SECTION_PROJECT_ALL, TAG_SELECT_OBJECTS, VIEW_PROJECT, '', COL_CONFIG_PROJECT, 0 );
+   mngData.AddSection( tmpID, SECTION_PROJECT_MY, TAG_SELECT_OBJECTS, VIEW_PROJECT, 'uid = #USER_ID# AND status <> '+IntToStr(PROJECT_DONE), COL_CONFIG_PROJECT, 0 );
+   mngData.AddSection( tmpID, SECTION_PROJECT_FAVORITE, TAG_SELECT_OBJECTS, VIEW_PROJECT, 'uid = #USER_ID# AND status <> '+IntToStr(PROJECT_DONE), COL_CONFIG_PROJECT, 0 );
+   mngData.AddSection( tmpID, SECTION_PROJECT_OTHER, TAG_SELECT_OBJECTS, VIEW_PROJECT, 'uid <> #USER_ID# AND status <> '+IntToStr(PROJECT_DONE), COL_CONFIG_PROJECT, 0 );
+   mngData.AddSection( tmpID, SECTION_PROJECT_ARCHIVE, TAG_SELECT_OBJECTS, VIEW_PROJECT, 'status = '+IntToStr(PROJECT_DONE), COL_CONFIG_PROJECT, 0 );
+   mngData.AddSection( tmpID, SECTION_PROJECT_INWORK, TAG_SELECT_OBJECTS, VIEW_PROJECT, 'status = '+IntToStr(PROJECT_INWORK), COL_CONFIG_PROJECT, 0 );
+
+   AddSection( 0, KIND_NONE, SECTION_EVENTS );
+   AddSection( 0, KIND_NONE, SECTION_MESSAGES );
+   AddSection( 0, KIND_NONE, SECTION_FAVORITE );
+
+   /// строим структуру разделения проектов по классификатору
+   /// получаем данные нулевого уровня
+   q0 := mngData.GetTypeProdLevel(0);
+   if assigned(q0) and (q0.RecordCount > 0) then
+   while not q0.eof do
+   begin
+       /// добавляем элемент нулевого уровня
+       tmpID2 := mngData.AddSection( tmpID, q0.FieldByName('name'{'kod'}).AsString, TAG_SELECT_OBJECTS, VIEW_PROJECT, 'parent_kod = '''''+q0.FieldByName('kod').AsString+''''' AND status <> '+IntToStr(PROJECT_DONE), COL_CONFIG_PROJECT, 0 );
+
+       /// получаем все его подуровни и добавляем в дерево
+       q1 := mngData.GetTypeProdLevel(q0.FieldByName('id').AsInteger);
+       if assigned(q1) and (q1.RecordCount > 0) then
+       while not q1.eof do
+       begin
+           mngData.AddSection( tmpID2, q1.FieldByName('name'{'kod'}).AsString, TAG_SELECT_OBJECTS, VIEW_PROJECT, 'kod = '''''+q1.FieldByName('kod').AsString+''''' AND status <> '+IntToStr(PROJECT_DONE), COL_CONFIG_PROJECT, 0 );
+           q1.Next;
+       end;
+       q0.Next;
+   end;
+
+{
+   AddSection( 0, KIND_NONE, SECTION_DOCUMENTS );
+
+   tmpID := AddSection( 0, KIND_NONE, SECTION_DOCUMENT_INWORK );
+   AddSection( tmpID, KIND_NONE, SECTION_DOCUMENT_MY );
+   AddSection( tmpID, KIND_NONE, SECTION_DOCUMENT_OTHER );
+
+   tmpID := AddSection( 0, KIND_NONE, SECTION_OBJECT_INWORK );
+   AddSection( tmpID, KIND_NONE, SECTION_OBJECT_MY );
+   AddSection( tmpID, KIND_NONE, SECTION_OBJECT_FAVORITE );
+   AddSection( tmpID, KIND_NONE, SECTION_OBJECT_OBJECT );
+
+   AddSection( 0, KIND_NONE, SECTION_EVENTS );
+   AddSection( 0, KIND_NONE, SECTION_MESSAGES );
+   AddSection( 0, KIND_NONE, SECTION_FAVORITE );
+}
+
+end;
+
+procedure TfMain.button1Click(Sender: TObject);
 var
    i, j
    ,izdid
    ,blockid
    ,ispolid
-   ,specid
    ,userID
+   ,tmpID
    : integer;
    query1, query2: TADOQuery;
-
-   procedure AddSection(id, icon: integer; section: string);
-   begin
-       mngData.AddLink( LNK_NAVIGATION, id, mngData.AddObject('kind, name, icon', ['1', section, icon]), 0 );
-   end;
 
    procedure AddObjects(kind: integer; name: string);
    var i : integer;
@@ -1634,22 +1632,11 @@ begin
 
    ClearStructure;
 
+   CreateWorkTree;
+
    // добавляем корневые разделы
    izdid   := mngData.AddObject('kind, name', [ KIND_SECTION, 'Изделия' ]);
    blockid := mngData.AddObject('kind, name', [ KIND_SECTION, 'Сборки' ]);
-   specid  := mngData.AddObject('kind, name', [ KIND_SECTION, 'Спецификации' ]);
-
-
-   // создаем и сразу привязываем корневые типизированные разделы дерева навигации
-   AddSection( 0, KIND_NONE,     SECTION_DOCUMENT_INWORK );
-   AddSection( 0, KIND_DETAIL,   'Детали' );
-   AddSection( 0, KIND_STANDART, 'Стандартные изделия' );
-   AddSection( 0, KIND_MATERIAL, 'Материалы' );
-   AddSection( 0, KIND_OTHER,    'Прочие изделия' );
-   AddSection( 0, KIND_ASSEMBL,  'Сборочные единицы' );
-   AddSection( 0, KIND_COMPLECT, 'Комплекты' );
-   AddSection( 0, KIND_COMPLEX,  'Комплексы' );
-
 
    // добавляем пачки различных объектов
    addObjects(4, 'Деталь');
@@ -1670,7 +1657,6 @@ begin
 
            // сразу привязываем к спецификации в структуре и навигации
            mngData.AddLink( LNK_STRUCTURE, query1.fieldByName('id').AsInteger, ispolid );
-           mngData.AddLink( LNK_NAVIGATION, query1.fieldByName('id').AsInteger, ispolid, 0 );
 
            lMainInfo.Caption := 'Исполнение ' + IntToStr(j) + ', ' + IntToStr(i);
            Application.ProcessMessages;
@@ -1683,7 +1669,6 @@ begin
    // ссылки на корневые разделы
    mngData.AddLink( LNK_STRUCTURE, 0, izdid );
    mngData.AddLink( LNK_STRUCTURE, 0, blockid );
-   mngData.AddLink( LNK_NAVIGATION, 0, specid, 0 );
 
    // гененрим корневые элементы
    query1 := Core.DM.OpenQueryEx('SELECT id FROM '+TBL_OBJECT+' WHERE kind = 10'); // все спецификации
@@ -1694,7 +1679,6 @@ begin
 
        // создаем привязку детали к сборке
        mngData.AddLink( LNK_STRUCTURE, izdid, query1.FieldByName('id').AsInteger );
-       mngData.AddLink( LNK_NAVIGATION, specid, query1.FieldByName('id').AsInteger, 0 );
 
        inc(j);
 
@@ -1775,30 +1759,6 @@ begin
        inc(i);
    end;
 
-
-   // генерим дерево навигации
-   // для каждого исполнения добавляем пачку разделов
-   query1 := Core.DM.OpenQueryEx('SELECT id FROM '+TBL_OBJECT+' WHERE kind = 11'); // все исполнения
-   i := 1;
-   // для каждого комплекса
-   while not query1.eof do
-   begin
-
-       AddSection( query1.FieldByName('id').AsInteger, KIND_DETAIL,   'Детали' );
-       AddSection( query1.FieldByName('id').AsInteger, KIND_STANDART, 'Стандартные изделия' );
-       AddSection( query1.FieldByName('id').AsInteger, KIND_MATERIAL, 'Материалы' );
-       AddSection( query1.FieldByName('id').AsInteger, KIND_OTHER,    'Прочие изделия' );
-       AddSection( query1.FieldByName('id').AsInteger, KIND_ASSEMBL,  'Сборочные единицы' );
-       AddSection( query1.FieldByName('id').AsInteger, KIND_COMPLECT, 'Комплекты' );
-       AddSection( query1.FieldByName('id').AsInteger, KIND_COMPLEX,  'Комплексы' );
-
-       lMainInfo.Caption := Format('Разделы: %d',[i]);
-       Application.ProcessMessages;
-
-       query1.Next;
-       inc(i);
-   end;
-
    // генерим непрямые ссылки
    query1 := Core.DM.OpenQueryEx('SELECT id FROM '+LNK_STRUCTURE);
    i := 1;
@@ -1828,8 +1788,8 @@ begin
        inc(i);
    end;
 
-   mngSpecTree.Refresh;
-   mngGroupTree.Refresh;
+   mngSpecTree.Refresh([]);
+   mngGroupTree.Refresh([]);
    ShowSubItems;
 
    lMainInfo.Caption := '';
@@ -1840,72 +1800,7 @@ end;
 procedure TfMain.sbShowObjectCatalogClick(Sender: TObject);
 begin
     // допускается открытие неограниченного количества экземпляров справочника
-    (TfObjectCatalog.Create(self)).Show;
-end;
-
-procedure TfMain.sbSaveWorkVersionClick(Sender: TObject);
-{ сохранение рабочей версии в базу.
-  данные файла в хранилище обновляются (перезаписываются), минорная версия увеличивается на 1 }
-var
-    dsDoc: TDataset;
-    filename
-   ,hash
-            : string;
-begin
-    // показываем окно добавления документа в режиме следующей версии (нельзя править путь и имя документа)
-    if   not Assigned( fAddDoc )
-    then fAddDoc := TfAddDoc.Create(self);
-
-    dsDoc := grdDocs.DataSource.DataSet;
-
-    filename := mngData.GetVersionPath( dsDoc.FieldByName('child').AsInteger, true );
-
-    if not FileExists(filename) then
-    begin
-        ShowMessage( lW( 'Рабочий файл версии отсутствует. Сохранение отменено.' + sLineBreak+ '(' + filename + ')'));
-        exit;
-    end;
-
-    hash := mngFile.GetHash( filename );
-    if hash = dsDoc.FieldByName('hash').AsString then
-    begin
-        ShowMessage( lW( 'В файл ' + ExtractFileName(filename) + ' не внесено изменений. Сохранение отменео.'));
-        exit;
-    end;
-
-
-    fAddDoc.object_id   := dsDoc.FieldByName('parent').AsInteger;
-    fAddDoc.object_name :=
-        '(' + dsDoc.FieldByName('parent').AsString + ') ' +
-              dsDoc.FieldByName('object_name').AsString;
-    fAddDoc.filename    := filename;
-    fAddDoc.name        := dsDoc.FieldByName('filename').AsString;
-    fAddDoc.version_id  := dsDoc.FieldByName('child').AsInteger;
-    fAddDoc.version     := dsDoc.FieldByName('version').AsString;
-    fAddDoc.doc_type    := dsDoc.FieldByName('type').AsInteger;
-    fAddDoc.mode        := SAVE_MODE_NEW_VERSION; // добавление следующей версии
-    fAddDoc.callback    := fMain.SaveWorkDocCallback;
-
-    fAddDoc.Show;
-
-end;
-
-function TfMain.SaveWorkDocCallback(object_id, version_id, doc_type: integer; Name, ext, FileName, Comment: string): boolean;
-begin
-
-    result := false;
-
-    if not mngData.UpdateDocumentVersion( version_id ) then
-    begin
-        ShowMessage( Core.DM.DBError );
-        exit;
-    end;
-
-    // обновляем список документов
-    ShowSubItems;
-
-    result := true;
-
+    TfObjectCatalog.Create(self).Show;
 end;
 
 

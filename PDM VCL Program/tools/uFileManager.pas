@@ -8,7 +8,7 @@ unit uFileManager;
 interface
 
 uses
-  ActiveX, ShlObj, Windows, SysUtils, IdHashSHA, Classes;
+  ActiveX, ShlObj, Windows, SysUtils, IdHashSHA, Classes, graphics, VCL.Imaging.jpeg;
 
 type
 
@@ -25,6 +25,8 @@ type
         function GetHash( filename: string ): string;
         // получаем хэш-сумму указанного файла
 
+        function CreatePreviewFile( Graphic: TGraphic; name: string ): boolean;
+        // сохранят в папку ревьюшек картинку с указанным именем
     end;
 
 
@@ -44,9 +46,22 @@ type
 
 
 
+function TFileManager.CreatePreviewFile( Graphic: TGraphic; name: string ): boolean;
+var
+    jpg: TJPEGImage;
+begin
+        // кидаем превьюшку в папку пользователя
+        jpg:=TJPEGImage.Create();
+        jpg.Assign(Graphic);
+        jpg.CompressionQuality:=60;
+        jpg.Compress();
+        jpg.SaveToFile( DIR_PREVIEW + ChangeFileExt( name, '.jpg' ) );
+        jpg.Free;
+end;
+
 function TFileManager.GetFileType(ext: string): integer;
 begin
-    result := dmSDQ( 'SELECT icon FROM '+TBL_DOCUMENT_TYPE+' WHERE ext = '''+ ext +'''', 0 );
+    result := dmSDQ( 'SELECT icon FROM '+TBL_DOCUMENT_TYPE+' WHERE ext like ''%'+ ext +'%''', 0 );
 end;
 
 function TFileManager.GetHash(filename: string): string;
