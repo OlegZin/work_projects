@@ -1,0 +1,133 @@
+USE [PDM]
+GO
+/****** Object:  StoredProcedure [dbo].[pdm_DELETE_PROJECT]    Script Date: 18.11.2019 9:18:07 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Зиновьев Олег
+-- Create date: 20.05.19
+-- Description:	Удаляет проект вместе со всей историей изменений
+-- =============================================
+ALTER PROCEDURE [dbo].[pdm_DELETE_PROJECT] 
+    @ID int -- id объекта-проекта
+AS
+BEGIN
+	
+	-- удаляем историю связи элементов
+	DELETE from project_structure_history 
+	WHERE child in (
+		SELECT distinct child
+		FROM project_structure_cross
+		where parent = @ID
+	)
+
+	-- удаляем связи элементов
+	DELETE from project_structure 
+	WHERE child in (
+		SELECT distinct child
+		FROM project_structure_cross
+		where parent = @ID
+	)
+
+	-- удаление привязки самого проекта
+	DELETE from project_structure 
+	WHERE child = @ID
+
+	-- удаляем допданные объектов
+	DELETE from PROJECT_OBJECT_EXTRA
+	WHERE project_id = @ID
+
+	-- удаляем историю объектов вложенных в проект
+	DELETE FROM PROJECT_OBJECT_HISTORY
+	WHERE id in
+	(
+		SELECT distinct child
+		FROM project_structure_cross
+		where parent = @ID
+	)
+
+	-- удаляем объекты вложенные в проект
+	DELETE FROM PROJECT_OBJECT
+	WHERE id in
+	(
+		SELECT distinct child
+		FROM project_structure_cross
+		where parent = @ID
+	)
+
+	-- удаляем объекты документов в проекте
+	DELETE FROM PROJECT_OBJECT
+	WHERE id in (
+	    SELECT project_doc_id 
+		FROM vDocumentProject 
+		WHERE project_id = @ID
+	)
+
+	-- удаляем файлы документов, привязанных к объектам проектов
+	DELETE FROM [FilesDB].[dbo].[PDMFiles] 
+	WHERE name in 
+	(
+        SELECT distinct GUID
+		FROM vDocumentProject
+		where project_object_id in 
+		(
+			SELECT distinct child
+			FROM project_structure_cross
+			where parent = @ID
+		)
+	)
+
+
+	-- очищаем ссылки на проект в допданных документов
+	UPDATE DOCUMENT_EXTRA SET project_object_id = null, project_doc_id = null, project_id = null
+	WHERE id in(
+	    SELECT doc_extra_id FROM vDocumentProject WHERE
+	    project_object_id in
+		( 
+			SELECT distinct child
+			FROM project_structure_cross
+			where parent = @ID
+		)
+	)
+
+	-- удаляем допданные документов, которые не ссылаются на КД или Проект
+	DELETE FROM DOCUMENT_EXTRA WHERE project_object_id = null AND object_id = null
+
+    -- удаляем объекты документов, привязанные к объектам проекта
+	DELETE FROM PROJECT_OBJECT
+	WHERE id in 
+	(
+	    SELECT project_object_id FROM vDocumentProject WHERE
+	    project_object_id in
+		( 
+			SELECT distinct child
+			FROM project_structure_cross
+			where parent = @ID
+		)
+	)
+
+	-- удаление допданных проекта
+	DELETE FROM PROJECT_EXTRA 
+	WHERE parent = @ID
+
+	-- удаляем объект проекта
+	DELETE FROM PROJECT_OBJECT 
+	WHERE id = @ID
+
+	-- удаляем допсвязи
+	DELETE FROM project_structure_cross 
+	WHERE child in (
+	    SELECT distinct child
+		FROM project_structure_cross
+		where parent = @ID
+	)
+
+	-- удаляем контролеров, привязанных к объектам проекта
+	DELETE FROM project_checker_link WHERE project_id = @ID
+
+	-- удаляем редакторов, привязанных к объектам проекта
+	DELETE FROM project_editor_link WHERE project_id = @ID
+
+END

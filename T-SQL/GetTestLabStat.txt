@@ -1,0 +1,393 @@
+USE [nft]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_vp_GetTestLabStat2]    Script Date: 18.11.2019 8:49:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- Batch submitted through debugger: SQLQuery1.sql|7|0|C:\Users\zinovev\AppData\Local\Temp\~vsB24F.sql
+-- =============================================
+-- Author:		<Зиновьев О.Н.>
+-- Create date: <6.12.2016>
+-- Description:	<Возвращает расширенную таблицу статистики ЦИЛ по результатам неразрушающего контроля. Разработана на основе процедуры sp_vp_GetTestLabStat>
+-- =============================================
+ALTER PROCEDURE [dbo].[sp_vp_GetTestLabStat2]
+	@DatBeg datetime,		--дата начала диапазона отчёта
+	@DatEnd datetime,		--дата окончания диапазона отчёта
+	@is_ceh3 bit=0			--принадлежность сварщика к цеху
+
+AS
+BEGIN
+    
+	DECLARE @TmpTbl TABLE (
+	    WldrId int                  -- id сварщика
+	   ,WldrMarkNum varchar(10)     -- маркировка мастера 
+	   ,WLength float               -- общая длина сварных швов (мм)
+	   ,WBadLength float            -- общая длина забракованных участков (мм)
+	   ,WCutLength float            -- общая длина вырезок для всех забракованных участков (мм)
+	   ,WVolume float               -- общий объем наваренных швов (мм кубических)
+	   ,W10mmVolume float           -- общий объем наваренных швов с приведением всех толщин к 10 мм (для вывода "усредненных" данных по объему) (мм кубических)
+	   ,WBadVolume float            -- общий объем забракованных участков (мм кубических)
+	   ,WBad10mmVolume float        -- общий объем забракованных участков с приведением всех толщин к 10 мм (для вывода "усредненных" данных по объему) (мм кубических)
+	   
+	   ,CalcCount int               -- кличество учтенных стыков (типа "С")
+	   ,PassedCount int             -- временно игнорируем стыки не "С" типа и запоминаем для отчета сколько пропущено
+	)
+
+	-- таблица хранения данных для подсчета объема наплавленного металла по одному сварщику
+	DECLARE @WeldTmp TABLE (        
+	    WeldDiam float              -- диаметр трубы
+	   ,SpravSquare float           -- площадь сечения из справочника, если есть
+	)
+
+	-- таблица хранения данных для подсчета объема наплавленного брака по одному сварщику
+	DECLARE @WeldBadTmp TABLE (        
+	    WeldBadLength float         -- длина дефектного участка (имеет значение только при учете дефектов)
+	   ,SpravSquare float           -- площадь сечения из справочника, если есть
+	   ,OverVolume float            -- объем вырезанный из трубы для устранения дефектов
+	)
+
+	DECLARE @CurWldr int            -- текущий обрабатываемый сварщик
+	
+	-- вспомогательные константы
+	DECLARE @MinSquare float = 0    -- минимальная поперечная площадь шва для случаев, когда неполучается привязаться к справочнику по Weldings_child.WeldType
+	DECLARE @FirstWeldQuery int = 1 -- признак первой подачи соединения на контроль
+
+
+
+	--пишем начальные данные: список всех сварщиков
+
+	INSERT INTO @TmpTbl ( WldrId, WldrMarkNum, WLength, WBadLength, WVolume, WBadVolume )
+	SELECT 
+	    wc.Welder_id, wc.Welder_MarkNum, 0, 0, 0, 0
+	FROM 
+	    WeldQueryTestLab_child tlc WITH(nolock)
+	
+	    LEFT JOIN Weldings_child wc WITH(nolock) ON tlc.WeldChildId=wc.id
+	WHERE 
+	        isnull( tlc.AccUnaccDate, 0 ) BETWEEN @DatBeg AND @DatEnd 
+		AND 
+		    wc.Welder_id IS NOT NULL
+	GROUP BY 
+	    wc.Welder_id, wc.Welder_MarkNum
+
+
+
+	-- если есть данные
+
+	IF exists ( SELECT TOP 1 WldrId FROM @TmpTbl )
+	BEGIN
+
+        -- перебираем каждого сварщика и собираем статистику по нему
+
+		DECLARE GetWelder CURSOR FOR
+		SELECT WldrId FROM @TmpTbl
+
+		OPEN GetWelder
+
+		FETCH NEXT FROM GetWelder into @CurWldr
+
+		WHILE @@FETCH_STATUS=0
+			BEGIN
+
+				------------------------------------------------------------
+                -- ПОЛУЧАЕМ ОБЩУЮ ДЛИНУ ВЫПОЛНЕННЫХ СВАРНЫХ ШВОВ В МЕТРАХ --
+				------------------------------------------------------------
+
+			    UPDATE @TmpTbl set WLength = (
+
+					SELECT 
+					    CAST( sum( isnull( wc.WeldDiam, 0 ) * 3.14 * 0.001 ) as numeric( 17, 3 ) )
+					FROM 
+					    WeldQueryTestLab_child tlc WITH(nolock)
+
+					    LEFT JOIN Weldings_child wc WITH(nolock) ON tlc.WeldChildId = wc.id
+
+					WHERE 
+					        isnull(tlc.AccUnaccDate,0) BETWEEN @DatBeg AND @DatEnd 
+						AND 
+                            tlc.WeldQueryNum = @FirstWeldQuery
+						AND
+						    wc.Welder_id = @CurWldr
+					   -- временное условие, пока не заплнен справочник на У и Т стыки, игнорим их 
+                       -- AND
+						--    wc.WeldType LIKE '%С%' COLLATE Cyrillic_General_CS_AS 
+
+				) WHERE WldrId = @CurWldr
+
+
+
+				------------------------------------------------------------
+                -- ПОЛУЧАЕМ КОЛИЧЕСТВО ПРОПУЩЕННЫХ СТЫКОВ                 --
+				------------------------------------------------------------
+
+			    UPDATE @TmpTbl set PassedCount = (
+
+					SELECT 
+					    COUNT(*)
+					FROM 
+					    WeldQueryTestLab_child tlc WITH(nolock)
+
+					    LEFT JOIN Weldings_child wc WITH(nolock) ON tlc.WeldChildId = wc.id
+
+					WHERE 
+					        isnull(tlc.AccUnaccDate,0) BETWEEN @DatBeg AND @DatEnd 
+						AND 
+                            tlc.WeldQueryNum = @FirstWeldQuery
+						AND
+						    wc.Welder_id = @CurWldr
+					   -- временное условие, пока не заплнен справочник на У и Т стыки, игнорим их 
+                       -- AND
+						--    wc.WeldType NOT LIKE '%С%' COLLATE Cyrillic_General_CS_AS 
+
+				) WHERE WldrId = @CurWldr
+
+
+
+				------------------------------------------------------------
+                -- ПОЛУЧАЕМ КОЛИЧЕСТВО УЧТЕННЫХ СТЫКОВ                    --
+				------------------------------------------------------------
+
+			    UPDATE @TmpTbl set CalcCount = (
+
+					SELECT 
+					    COUNT(*)
+					FROM 
+					    WeldQueryTestLab_child tlc WITH(nolock)
+
+					    LEFT JOIN Weldings_child wc WITH(nolock) ON tlc.WeldChildId = wc.id
+
+					WHERE 
+					        isnull(tlc.AccUnaccDate,0) BETWEEN @DatBeg AND @DatEnd 
+						AND 
+                            tlc.WeldQueryNum = @FirstWeldQuery
+						AND
+						    wc.Welder_id = @CurWldr
+					   -- временное условие, пока не заплнен справочник на У и Т стыки, игнорим их 
+                       -- AND
+						--    wc.WeldType LIKE '%С%' COLLATE Cyrillic_General_CS_AS 
+
+				) WHERE WldrId = @CurWldr
+
+
+
+				-----------------------------------------------------------------------
+                -- ПОЛУЧАЕМ ОБЩУЮ ДЛИНУ ЗАБРАКОВАННЫХ ОТРЕЗКОВ СВАРНЫХ ШВОВ В МЕТРАХ --
+				-----------------------------------------------------------------------
+
+			    UPDATE 
+				    @TmpTbl 
+				SET 
+				    WBadLength = (
+						SELECT 
+							CAST( sum( isnull( tlc.DefLength, 0 ) * 0.001 ) as numeric( 17, 3 ) )
+						FROM 
+							WeldQueryTestLab_child tlc WITH(nolock)
+					    
+							LEFT JOIN Weldings_child wc WITH(nolock) ON tlc.WeldChildId = wc.id
+						WHERE 
+								isnull(tlc.AccUnaccDate,0) BETWEEN @DatBeg AND @DatEnd 
+							AND 
+								wc.Welder_id = @CurWldr
+					        -- временное условие, пока не заплнен справочник на У и Т стыки, игнорим их 
+                           -- AND
+						   --     wc.WeldType LIKE '%С%' COLLATE Cyrillic_General_CS_AS 
+					)
+				WHERE 
+				    WldrId = @CurWldr
+
+
+				
+				------------------------------------------------------------
+                -- ПОЛУЧАЕМ ОБЩУЮ ДЛИНУ ВЫРЕЗОВ В МЕТРАХ --
+				------------------------------------------------------------
+/*
+			    UPDATE @TmpTbl set WCutLength = (
+
+						SELECT 
+							CAST( sum( wos.volume * 0.001 ) as numeric( 17, 3 ) )
+						FROM 
+							WeldQueryTestLab_child tlc WITH(nolock)
+					    
+							LEFT JOIN Weldings_child wc WITH(nolock) ON tlc.WeldChildId = wc.id
+    
+							LEFT JOIN Weldings_overvolume_sprav wos WITH(nolock) ON wos.diameter = wc.WeldDiam AND wos.thikness = 10 
+						WHERE 
+								isnull(tlc.AccUnaccDate,0) BETWEEN @DatBeg AND @DatEnd 
+							AND
+							    tlc.DefLength <> 0 
+							AND
+								wc.Welder_id = @CurWldr
+
+				) WHERE WldrId = @CurWldr
+*/
+
+
+				-----------------------------------------------------
+				--      ПОЛУЧАЕМ ОБЩИЙ ОБЪЕМ НАПЛАВЛЕННЫХ ШВОВ     --
+				-----------------------------------------------------
+
+                -- 1) получаем список всех соединений сделанных сварщиком, подтягивая из справочника данные по сечению, если в 
+				--    Weldings_child.WeldType указан правильный тип соединения (или хотя бы похожий)
+				DELETE FROM @WeldTmp
+
+				INSERT INTO 
+				    @WeldTmp (WeldDiam, SpravSquare)
+				SELECT 
+				    wc.WeldDiam, wss.[Square]
+				FROM 
+					WeldQueryTestLab_child            tlc WITH(nolock)
+					    
+					LEFT JOIN Weldings_child           wc WITH(nolock)  ON tlc.WeldChildId      = wc.id
+					LEFT JOIN Weldings_square_sprav   wss WITH(nolock)  ON wc.WeldType            LIKE '%' + wss.[Type] + '%' COLLATE Cyrillic_General_CS_AS
+					                                                                                -- выборка по типу соединения с учетом регистра, поскольку есть тип Т, 
+																	                                -- а в поле WeldType встречается всякий мусор типа "катет"
+ 
+				WHERE 
+					    isnull( tlc.AccUnaccDate, 0 ) BETWEEN @DatBeg AND @DatEnd 
+					AND 
+					    tlc.WeldQueryNum = @FirstWeldQuery
+					AND
+					    wc.Welder_id = @CurWldr
+					AND
+					    wss.Thikness = wc.WeldThikness
+					-- временное условие, пока не заплнен справочник на У и Т стыки, игнорим их 
+                   -- AND
+					--    wc.WeldType LIKE '%С%' COLLATE Cyrillic_General_CS_AS 
+ 
+                -- 2) получаем общую сумму наплавленного материала по всем соединениям
+				-- ВАЖНО! если тип соединения Weldings_child.WeldType не содержится в справочнике, будет посчитано мо минимуму!
+			    UPDATE @TmpTbl set WVolume = (
+
+					SELECT 
+					    CAST( sum( 
+						    WeldDiam * 
+							3.14 * 
+							isnull( SpravSquare, @MinSquare )
+						) AS NUMERIC (17,0) )
+					FROM 
+					    @WeldTmp
+
+				) where WldrId = @CurWldr
+
+
+				
+				------------------------------------------------------
+                -- ПОЛУЧАЕМ ОБЩИЙ ОБЪЕМ ЗАБРАКОВАННЫХ ОТРЕЗКОВ ШВОВ --
+				------------------------------------------------------
+
+                -- 1) получаем список всех запоротых отрезков сварщика, подтягивая из справочника данные по сечению, если в 
+				--    Weldings_child.WeldType указан правильный тип соединения (или хотя бы похожий)
+				DELETE FROM @WeldBadTmp
+
+				INSERT INTO 
+				    @WeldBadTmp (WeldBadLength, SpravSquare, OverVolume)
+				SELECT 
+				    tlc.DefLength, wss.[Square], dbo.calc_volume_by_gost( wc.WeldDiam, wc.WeldThikness, tlj.Defects )
+				FROM 
+					WeldQueryTestLab_child           tlc WITH(nolock)
+					    
+					LEFT JOIN Weldings_child          wc WITH(nolock)  ON tlc.WeldChildId      = wc.id
+					LEFT JOIN Weldings_square_sprav  wss WITH(nolock)  ON wc.WeldType            LIKE '%' + wss.[Type] + '%' COLLATE Cyrillic_General_CS_AS 
+					                                                                             -- выборка по типу соединения с учетом регистра, поскольку есть тип Т, 
+																								 -- а в поле WeldType встречается всякий мусор типа "катет"
+					LEFT JOIN TestLabJournals        tlj WITH(nolock)  ON tlj.TLChildId        = tlc.id 
+					                                                                             -- берем для парсинга поле defects с подробным описанием количества и длин дефектов
+																								 -- привязка к tlc.DefLength не достаточна из-за необходимости учитывать не только
+																								 -- объем по длине дефекта, но и избыточный вырез материала при устранеии дефекта
+				WHERE 
+					    isnull(tlc.AccUnaccDate,0) BETWEEN @DatBeg AND @DatEnd 
+					AND 
+					    wc.Welder_id = @CurWldr
+					AND
+					    tlc.DefLength IS NOT NULL
+					AND
+					    wss.Thikness = wc.WeldThikness
+					AND
+					    tlj.Defects IS NOT NULL
+				    -- временное условие, пока не заплнен справочник на У и Т стыки, игнорим их 
+                   -- AND
+					--    wc.WeldType LIKE '%С%' COLLATE Cyrillic_General_CS_AS 
+
+                -- 2) получаем общую сумму наплавленного материала по всем дефектам
+				-- ВАЖНО! если тип соединения Weldings_child.WeldType не содержится в справочнике, будет посчитано мо минимуму!
+			    UPDATE @TmpTbl set WBadVolume = (
+					SELECT 
+					    CAST( sum( 
+						    ( WeldBadLength + OverVolume ) * isnull( SpravSquare, @MinSquare )
+						) as NUMERIC ( 17, 3 ) )
+					FROM 
+					    @WeldBadTmp
+
+				) where WldrId = @CurWldr
+
+                -- 3) запоминаем длину вырезов
+			    UPDATE @TmpTbl set WCutLength = /*WCutLength + */(
+					SELECT TOP 1 OverVolume FROM @WeldBadTmp
+				) * 0.001 where WldrId = @CurWldr
+
+
+				-- переходим к следующему сварщику
+				FETCH NEXT FROM GetWelder into @CurWldr
+
+            END;
+
+		CLOSE GetWelder
+		DEALLOCATE GetWelder
+
+    END
+
+
+    ----------------------
+	-- ИТОГОВАЯ ТАБЛИЦА --
+	----------------------
+
+	SELECT 
+	    wldr.FIO, 
+		WldrMarkNum,
+
+		-- общая длина сварных швов всех диаметров 
+		CAST( isnull(WLength, 0) AS numeric( 17, 1 ) )   
+		AS WLength, 
+
+		-- объем всего наплавленного материала в килограммах 
+	    CAST( isnull(WVolume, 0) * 7.85 * 0.000001 AS NUMERIC( 17, 1 ) )
+		AS WVolume, 
+
+		-- общая длина забракованных сварных швов всех диаметров (с учетом выборки для устранения дефекта) 
+--        CAST( CAST( WBadLength + isnull( WCutLength, 0 ) AS numeric( 17, 2 ) ) AS varchar ) + ' (+' + CAST( CAST( isnull( WCutLength, 0 ) AS numeric(17,2) ) AS VARCHAR ) + ')'
+        CAST( isnull(WBadLength, 0) + isnull( WCutLength, 0 ) AS numeric( 17, 2 ) )
+		AS WBadLength,  
+
+		-- объем наплавленного материала брака в килограммах 
+		CAST( isnull(WBadVolume, 0) * 7.85 * 0.000001 AS NUMERIC( 17, 1 ) )
+		AS WBadVolume, 
+
+		-- процент брака по объему наплавленного материала
+		CASE WHEN WVolume = 0 OR WVolume IS NULL 
+		    THEN 
+			    '0' 
+			ELSE
+		        CAST( CAST( isnull( WBadVolume, 0 ) * 100 / isnull( WVolume, 1 ) as NUMERIC(17,1) ) AS VARCHAR ) 
+		END 
+		AS WBadValuePercent, 
+
+		-- общая длина приведенная из объема наплавленного в пересчете на соединение со средними параметрами (условные метры)
+		CAST( CAST( ( WVolume / 100 )    * 0.001 AS NUMERIC( 17, 1 ) ) AS VARCHAR ) /*+ ' (' + CAST( CalcCount as VARCHAR) + '/' + CAST( PassedCount as VARCHAR ) + ')'*/
+		AS WBadLength10mm,
+
+		-- количество стыков, штуки
+		CAST( CalcCount as VARCHAR)
+		AS WCalcCount
+
+	FROM 
+	    @TmpTbl tmp
+	
+	    LEFT JOIN Welders wldr WITH(nolock) ON tmp.WldrId = wldr.id
+
+	WHERE wldr.is_ceh3=@is_ceh3
+	 
+	ORDER BY 
+	    wldr.FIO
+
+END

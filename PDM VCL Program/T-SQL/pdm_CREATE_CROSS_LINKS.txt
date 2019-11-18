@@ -1,0 +1,79 @@
+USE [PDM]
+GO
+/****** Object:  StoredProcedure [dbo].[pdm_CREATE_CROSS_LINKS]    Script Date: 18.11.2019 9:16:44 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		«иновьев ќ.Ќ.
+-- Create date: 29.11.2018
+-- Description:	
+--     —оздает набор вспомогательных ссылок (маршрутов) в таблице [@tableName]_cross, отвечающей за быструю нваигацию по дереву св€зей таблицы [@tableName].
+--     ѕо сути, это набор всех предков по дереву [@tableName] дл€ указанной св€зки. ¬ыбираютс€ как id св€зки, так и текущие значени€ Parent и Child
+--     этих св€зок. ƒанные избыточные, но позвол€ют не прив€зыватьс€ к другим таблицам и делают этот механизм независимым.
+
+--     ѕроцедура заточена под рекурсивный вызов.
+
+-- јлгоритм работы:
+--     - дл€ текущей св€зки ( [@tableName].id ) берутс€ все записи, где [@tableName].child = [@tableName].parent текущей св€зи
+--     - текущие данные занос€тс€ в маршрут (таблица [@tableName]_cross)
+--     - получаем список родителей и дл€ каждого рекурсивно вызываем эту же процедуру, чтобы обработать все ответвлени€ св€зей
+
+-- ѕосле отработки всех рекурсий, получим список всех предков базовой св€зки вплоть до корневого элемента
+-- =============================================
+ALTER PROCEDURE [dbo].[pdm_CREATE_CROSS_LINKS] 
+    @tableName sysname,        -- им€ исходной таблицы в которой искать данные
+	@link_id int,              -- id текущей обрабатываемой записи-св€зи из таблицы св€зей
+	@base_link_id int = 0,     -- при рекурсивном запуске - id исходной записи-св€зи из таблицы св€зей, дл€ которой строитс€ набор
+	@child_id int = 0          -- при рекурсивном запуске - id исходного объекта, дл€ которого ищутс€ родители
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	DECLARE @sql nvarchar(max)
+
+	
+	-- перва€ итераци€
+	IF @base_link_id = 0
+	BEGIN 
+	     SET @base_link_id = @link_id
+		 -- чистим маршрут дл€ базовой св€зки, если есть какой-то мусор
+		 -- (отменено, поскольку требуетс€ перед удалением скинуть имеющиес€ в архив, что данна€ процедура не сможет сделать
+		 --  и данна€ задача возложена на программу )
+--		 SET @sql = 'DELETE FROM ' + @tableName + '_cross WHERE base_link_id = '+CAST(@link_id as varchar) 
+--		 EXEC(@sql)
+      
+	END
+
+
+	SET @sql = 
+	+ N' DECLARE @parent int '
+	+ N' DECLARE @child int '
+	-- получаем данные текущей св€зки
+	+ N' SELECT @parent = parent, @child = child FROM '+@tableName+' WHERE id = ' + CAST(@link_id as varchar)
+	-- добавл€ем ее в маршрут
+--	+ N' IF NOT EXISTS (SELECT * FROM '+@tableName+'_cross WHERE link_id = '+CAST(@link_id as varchar)+' AND base_link_id = '+CAST(@base_link_id as varchar)+' AND parent = @parent AND child = @child ) BEGIN '
+	+ N' IF NOT EXISTS (SELECT * FROM '+@tableName+'_cross WHERE base_link = '+CAST(@base_link_id as varchar)+' AND parent = @parent AND child = '+CAST(@child_id as varchar)+' ) BEGIN '
+--	+ N' INSERT INTO '+@tableName+'_cross (link_id, base_link_id, parent, child) VALUES ('+CAST(@link_id as varchar)+', '+CAST(@base_link_id as varchar)+', @parent, @child) '
+	+ N' IF @parent <> 0 INSERT INTO '+@tableName+'_cross (base_link, parent, child) VALUES ('+CAST(@base_link_id as varchar)+', @parent, '+CAST(@child_id as varchar)+') '
+	+ N' END '
+    -- получаем всех родителей текущей св€зки
+	+ N' DECLARE @p int '
+	+ N' DECLARE c'+CAST(@link_id as varchar)+' CURSOR '
+	+ N' FOR SELECT id FROM '+@tableName+' WHERE child = @parent '
+	+ N' OPEN c'+CAST(@link_id as varchar)+' '
+	+ N' FETCH NEXT FROM c'+CAST(@link_id as varchar)+' INTO @p; '
+	+ N' WHILE @@FETCH_STATUS = 0 ' 
+	+ N' BEGIN ' 
+         -- рекурсивно обрабатываем каждого предка
+	+ N'     EXEC pdm_CREATE_CROSS_LINKS '+@tableName+', @p, '+CAST(@base_link_id as varchar) + ', ' + CAST(@child_id as varchar)
+	+ N'     FETCH NEXT FROM c'+CAST(@link_id as varchar)+' INTO @p '
+	+ N' END '
+	+ N' CLOSE c'+CAST(@link_id as varchar)+'; ' 
+	+ N' DEALLOCATE c'+CAST(@link_id as varchar)+'; ' 
+
+	exec sp_executesql @sql
+    
+END
