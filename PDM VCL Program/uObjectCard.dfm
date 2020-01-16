@@ -33,7 +33,6 @@ object fObjectCard: TfObjectCard
     Caption = #1057#1086#1079#1076#1072#1090#1100
     TabOrder = 1
     OnClick = bOkClick
-    ExplicitTop = 588
   end
   object bClose: TButton
     Left = 447
@@ -44,7 +43,6 @@ object fObjectCard: TfObjectCard
     Caption = #1047#1072#1082#1088#1099#1090#1100
     TabOrder = 0
     OnClick = bCloseClick
-    ExplicitTop = 588
   end
   object PageControl1: TPageControl
     Left = 0
@@ -56,13 +54,10 @@ object fObjectCard: TfObjectCard
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 2
     TabWidth = 200
-    ExplicitHeight = 553
     object pageInfo: TTabSheet
       Caption = #1044#1072#1085#1085#1099#1077
       OnDragDrop = FormDragDrop
       OnDragOver = FormDragOver
-      ExplicitLeft = 0
-      ExplicitTop = 33
       DesignSize = (
         583
         516)
@@ -1128,7 +1123,6 @@ object fObjectCard: TfObjectCard
     object pageFile: TTabSheet
       Caption = #1044#1086#1082#1091#1084#1077#1085#1090
       ImageIndex = 1
-      ExplicitHeight = 521
       DesignSize = (
         583
         516)
@@ -1249,7 +1243,6 @@ object fObjectCard: TfObjectCard
         Anchors = [akLeft, akTop, akRight, akBottom]
         BevelOuter = bvNone
         TabOrder = 2
-        ExplicitHeight = 384
         object iPreview: TImage
           Left = 0
           Top = 142
@@ -1336,7 +1329,6 @@ object fObjectCard: TfObjectCard
     Caption = #1044#1086#1082#1091#1084#1077#1085#1090'...'
     TabOrder = 3
     OnClick = bAddDocumentClick
-    ExplicitTop = 588
   end
   object checkAutoLink: TCheckBox
     Left = 8
@@ -1348,7 +1340,6 @@ object fObjectCard: TfObjectCard
     Checked = True
     State = cbChecked
     TabOrder = 4
-    ExplicitTop = 559
   end
   object OpenDialog: TOpenDialog
     Left = 32

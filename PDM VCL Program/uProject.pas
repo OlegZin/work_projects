@@ -100,7 +100,7 @@ type
     bFreezeProject: TButton;
     bUnFreezeProject: TButton;
     popStructure: TPopupMenu;
-    N1: TMenuItem;
+    miDelete: TMenuItem;
     imgObjectState: TImageList;
     sbObjectToWork: TSpeedButton;
     sbObjectToCheck: TSpeedButton;
@@ -193,7 +193,7 @@ type
     procedure bUnFreezeProjectClick(Sender: TObject);
     procedure bDoneProjectClick(Sender: TObject);
     procedure popObject1Popup(Sender: TObject);
-    procedure N1Click(Sender: TObject);
+    procedure miDeleteClick(Sender: TObject);
     procedure sbObjectToReadyClick(Sender: TObject);
     procedure bRefreshClick(Sender: TObject);
     procedure menuMakeFileMainClick(Sender: TObject);
@@ -2694,12 +2694,20 @@ begin
     if fDropedFile <> '' then showmessage('up!');
 end;
 
-procedure TfProject.N1Click(Sender: TObject);
+procedure TfProject.miDeleteClick(Sender: TObject);
 begin
     if not gridProjectTree.DataSource.DataSet.Active and
       (gridProjectTree.DataSource.DataSet.RecordCount = 0) and
       (gridProjectTree.DataSource.DataSet.RecNo < 0)
     then exit;
+
+    // проверка возможности удаления связки исходя из наличия ролей
+    if gridProjectTree.DataSource.DataSet.FieldByName('mem_icon').AsInteger = KIND_SPECIF then
+    begin
+        ShowMessage('Не допускается удаление спецификации.');
+        exit;
+    end;
+
 
     // проверка возможности удаления связки исходя из наличия ролей
     if not mngData.HasRole( ROLE_UNLINK_FROM_STRUCTURE, WorkgroupID ) then

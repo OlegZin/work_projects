@@ -308,7 +308,7 @@ begin
     error := '';
 
     /// проверяем на заполнение ключевых полей перед сохранением
-    if fKind = 0 then error := 'Не выбран '+lObjectKind.Caption+'!';
+    if fKind <= 0 then error := 'Не выбран '+lObjectKind.Caption+'!';
 
     if error = '' then
     if (fKind in [KIND_ASSEMBL, KIND_COMPLEX, KIND_COMPLECT]) and
@@ -316,7 +316,7 @@ begin
     then error := 'Не выбран '+lObjectIcon.Caption+' объекта!';
 
     if error = '' then
-    if (fKind in [KIND_STANDART, KIND_DETAIL]) and
+    if (fKind in [{KIND_STANDART,} KIND_DETAIL]) and
        (fMaterial = 0)
     then error := 'Не выбран '+lMaterial.Caption+' объекта!';
 
