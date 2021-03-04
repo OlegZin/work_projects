@@ -1,15 +1,15 @@
 <?php 
 
 /// настройки доступа к базам данных 
-define("SERVER", "192.168.100.180"); //server-htm.ntm.grouphms.local
+define("SERVER", ""); //server-htm.ntm.grouphms.local
 
 define("FILE_DATABASE", "FilesDB");
 define("FILE_UID",      "PhotoArch");
 define("FILE_PWD",      "NTMPhotoArchUser");
 
-define("NFT_DATABASE", "nft_test_15092019");
-define("NFT_UID",      "UserProgNFT");
-define("NFT_PWD",      "H6v92InV");
+define("NFT_DATABASE", "");
+define("NFT_UID",      "");
+define("NFT_PWD",      "");
 
 /// флаги успешности возвращаемых сервером результатов
 define("RESULT_OK", true);
