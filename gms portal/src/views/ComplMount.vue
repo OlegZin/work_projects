@@ -8,10 +8,10 @@
       <EditForm v-if="screen==1" :caption="caption" :data="curr_data" :measure_list="mount_measure" @onCancel="ShowMain" @onSave="onSaveNew"/>
 
 <!-- Окно правки позиции + смена статуса -->
-      <EditForm v-if="screen==2" :caption="caption" :data="curr_data" @onCancel="ShowMain" @onSave="onSaveState"/>
+      <EditForm v-if="screen==2" :caption="caption" :data="curr_data" @onCancel="ShowMain" @onSave="doChangeMount"/>
 
 <!-- Окно правки позиции с имеющейся картой замены + смена статуса на Установлено -->
-      <EditKZForm v-if="screen==3" :data="curr_data" :IzdId="mount_block_id" @onCancel="ShowMain" @showError="showError" @showMessage="showMessage"/>
+      <EditKZForm v-if="screen==3" :data="curr_data" :IzdId="mount_block_id" @onCancel="ShowMain" @onOk="onKZChange" @showError="showError" @showMessage="showMessage"/>
 
 <!-- Окно отмены карты замены позиции -->
       <CancelKZForm v-if="screen==4" :data="curr_data" @onCancel="ShowMain" @onSave="onSaveNew"/>
@@ -32,7 +32,7 @@
 
             <div id="zavnum-select">
              <label>Зав. №</label>
-             <input type="text" v-model="mount_zavnum" @keyup.enter="onGetBlocks">
+             <input type="text" v-model="mount_zavnum" @keyup.enter="onGetBlocks" autocomplete="on">
              <button @click="onGetBlocks">Выбрать</button>
             </div>
 
@@ -92,6 +92,7 @@
                       <div class="content">
                           <img src="./../assets/mount/KZExists.jpg" data-toggle='tooltip' title='Имеется карта замены' v-if="row.kzex !== 0">
                           <img src="./../assets/mount/Documented.jpg" data-toggle='tooltip' title='Обработано БТД' v-if="row.BtdState !== 0">
+                          <img src="./../assets/mount/dismantle.jpg" data-toggle='tooltip' title='Демонтировать при транспортировке' v-if="row.dismantle && row.dismantle !== 0">
                       </div>  
                     </div>
                     <div class="cell">
@@ -224,14 +225,32 @@ export default {
             this.screen = 3;
         },
 
+        onKZChange(){
+            this.ShowMain();
+            this.onBlockSelect(); 
+        },
 
         /// в меню операций была нажата кнопка Не установлено
         goUnMount(){
             this.caption = "Применение статуса Не установлено";
+            this.edit_mode = 0;
             this.new_state = 0;
             this.screen = 2;
         },
 
+        doChangeMount( data ){
+        /// метод вызывается из окна screen==2, изменение статуса на установлено или не установлено
+            data.State = this.new_state;
+
+            console.log('doChangeMount');
+            if (data.id === null) {
+                console.log('-> onSaveState');
+                this.onSaveState( data );  
+            } else {
+                console.log('-> onSaveNew');
+                this.onSaveNew( data );
+            };
+        },
 
         goCancelKZ(){
             this.edit_mode = 1;    /// режим удаления КЗ
@@ -308,6 +327,11 @@ export default {
             if ((!data.Cnt) || (''+data.Cnt).trim() == "")       { this.showError('Укажите количество!');                        return; }
             if (!this.isNumber(data.Cnt))                        { this.showError('Укажите числовое значение количества!');      return; }
             if ((!data.EIzm) || data.EIzm.trim() == "")          { this.showError('Укажите единицу измерения!');                 return; }
+            if (!this.edit_mode && this.edit_mode !== 0)         { this.showError('Укажите тип операции!');                      return; }
+
+            console.log('[onSaveNew] data: '); 
+            console.log(data); 
+            console.log('[onSaveNew] mode: ' + this.edit_mode); 
 
             data.division = this.mount_section;
             data.Izd = this.mount_block_id;
@@ -359,7 +383,13 @@ export default {
             if ((!data.Cnt) || (''+data.Cnt).trim() == "")       { this.showError('Укажите количество!');                   return; }
             if (!this.isNumber(data.Cnt))                        { this.showError('Укажите числовое значение количества!'); return; }
             if ((!data.EIzm) || data.EIzm.trim() == "")          { this.showError('Укажите единицу измерения!');            return; }
-
+            if (!this.edit_mode && this.edit_mode !== 0)         { this.showError('Укажите тип операции!');                 return; }
+/*
+            console.log('[onSaveState] data: '); 
+            console.log(data); 
+            console.log('[onSaveState] mode: ' + this.edit_mode); 
+            console.log('[onSaveState] Izd: ' + this.mount_block_id); 
+*/
             /// добавляем данные в локальную таблицу
             data.division = this.mount_section;
             data.State = this.new_state;
@@ -449,6 +479,8 @@ export default {
 
             var context = cnt || this; /// сохраняем контекст, поскольку this в callback не будет уже указывать на экземпляр Vue
 
+            console.log('getMounted, mount_block_id = ' + this.mount_block_id);
+
             context.$store.dispatch(
 
                 'ServerRequest', 
@@ -465,7 +497,14 @@ export default {
 
                         } else {
 
-                            context.mount_table = data;   
+                            console.log('getMounted');
+                            console.log(data);
+
+                            context.mount_table = data; 
+
+                            context.mount_table.forEach(function(item) {
+                              item.ZavNum = '' + (item.ZavNum || '');
+                            })  
 
                         }
                     }

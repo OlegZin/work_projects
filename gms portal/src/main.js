@@ -5,6 +5,23 @@ import store from './store'
 
 Vue.config.productionTip = false
 
+// https://jsfiddle.net/cg7z0Lkj/
+// фильтр используется в телефонном спроавочнике для добавления кастомного номера телефона в конференцию
+Vue.directive('phone', {
+  bind(el) {  
+    el.oninput = function(e) {
+      if (!e.isTrusted) {
+        return;
+      }
+
+      const x = this.value.replace(/\D/g, '').match(/(\d{0,11})/);
+      this.value = x[1];//!x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+      el.dispatchEvent(new Event('input'));
+    }
+  },
+});
+
+
 new Vue({
   router,
   store,

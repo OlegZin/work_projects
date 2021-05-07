@@ -68,6 +68,13 @@
 
 		mounted(){
 
+/// есть проблема у AXIOS со знаками + при url кодировке. Это связано с некорректными библиотеками, неподдерживающими стандарт.
+/// https://github.com/axios/axios/issues/1111    
+/// для обхода проблемы, чтобы не перелопачивать логику, значимой строкой для поиска будет все от начала до первого найденного плюса,
+/// или вся строке, если их нет.
+            let obz = this.data.CurMat;
+            if (obz.indexOf('+') > -1) obz = obz.slice(0, obz.indexOf('+')-1);
+
             this.$store.dispatch(
 
                 'ServerRequest', 
@@ -75,7 +82,7 @@
                     method: "getHistory",
 
                     Izd: this.data.Izd, 
-                    obozn: this.data.CurMat,
+                    obozn: obz,
 
                     callback: (data, error) => { 
 

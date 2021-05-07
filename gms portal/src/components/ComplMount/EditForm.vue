@@ -7,13 +7,13 @@
 		<div id="body">
 
 				<div>Обозначение</div>
-				<div><input v-model="data.obozn"></div>
+				<div><input v-model="data.obozn" :disabled="isReadonly"></div>
 
 				<div class="require">Наименование</div>
-				<div><input v-model="data.CurMat"></div>
+				<div><input v-model="data.CurMat" :disabled="isReadonly"></div>
 
 				<div>Зав. №</div>
-				<div><input v-model="data.ZavNum"></div>
+				<div><input v-model="data.ZavNum" autocomplete="on"></div>
 
 				<div>Примечание</div>
 				<div><input v-model="data.Comment"></div>
@@ -23,7 +23,7 @@
 
 				<div class="require">Ед. изм.</div>
 				<div>
-					<select v-model="data.EIzm">
+					<select v-model="data.EIzm" :disabled="isReadonly">
 				       <option v-for="measure in measure_list" :value="measure.Naimeb" :selected="{ selected: data.EIzm == measure.Naimeb }">{{measure.Naimeb}}</option>
 				    </select>
 			    </div>
@@ -52,9 +52,16 @@
             	this.$emit('onCancel');
             },
             onSave() {
+            	///this.data.ZavNum = '{}'+this.data.ZavNum;
+            	/// костыль, предотвращающий превращение значения этого поля в число при передаче на сервер,
+            	/// когда у пользователей пропадают нолиси в начале числа, а это не допустимо
             	this.$emit('onSave', this.data);
             }
 		},
+
+		computed: {
+			isReadonly: function(){ return (this.data.CurMatId) && (this.data.CurMatId !== -1) }
+        },
 
 	    mounted(){
 

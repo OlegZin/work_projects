@@ -43,7 +43,7 @@
 		</div>
 
 		<div v-if="state == 3">
-            <p>{{fio}}, новый пароль был выслан на указанный e-mail. Используйте его для входа в систему.</p>
+            <p>Новый пароль был выслан на указанный e-mail. Используйте его для входа в систему.</p>
 			<button class="first" @click="toScreen(0)">На главную</button>
 		</div>
 
@@ -107,7 +107,7 @@
             /// пользователь регистрируется,введя логин и e-mail для получения пароля
         	onRegister() {
         		this.error = '';
-        		this.fio = '';
+        		this.$store.dispatch('setFio', '');
 
 				/// отсекаем очевидные ошибки чтобы не делать очевидно провальный запрос к серверу
 				if (this.login === "") { this.error = 'Не указан логин'; }
@@ -151,14 +151,20 @@
                 /// сохраняем контекст для вызова колбека
                 var _this = this;
                 
+                console.log(this.email);
+                console.log(process.env.VUE_APP_WEB);
+
                 onRequest(
                 	{   method: "restore",
-			            email: this.email
+			            email: this.email,
+                        url: process.env.VUE_APP_WEB
                     },
                     function( error, data ){ 	
                     	if ( error !== "" ) {
                     		_this.error = error;
                     	} else {
+                        	console.log('Restored!');
+                        	console.log(data.data);
 	                    	_this.$store.dispatch('setFio', data.data);
 					       	_this.toScreen(3);
 				       }

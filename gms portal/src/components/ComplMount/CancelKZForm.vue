@@ -15,7 +15,7 @@
             	this.$emit('onCancel');
             },
             onCancelKZ() {
-            	this.$emit('onCancelKZ', this.data);
+            	this.$emit('onSave', this.data);
             }
 		}
 	}

@@ -1,15 +1,16 @@
 <?php 
 
 /// настройки доступа к базам данных 
-define("SERVER", ""); //server-htm.ntm.grouphms.local
+define("SERVER", "192.168.100.180"); //server-htm.ntm.grouphms.local
 
 define("FILE_DATABASE", "FilesDB");
 define("FILE_UID",      "PhotoArch");
 define("FILE_PWD",      "NTMPhotoArchUser");
 
-define("NFT_DATABASE", "");
-define("NFT_UID",      "");
-define("NFT_PWD",      "");
+//define("NFT_DATABASE", "nft_test_15092019");
+define("NFT_DATABASE", "nft");
+define("NFT_UID",      "UserProgNFT");
+define("NFT_PWD",      "H6v92InV");
 
 /// флаги успешности возвращаемых сервером результатов
 define("RESULT_OK", true);
@@ -71,7 +72,10 @@ function ExecQuery1 ($sql, $params, $database, $uid, $pwd) {
 }
 
 
-
+function _Log( $mess ){
+	ExecQuery1("INSERT INTO web_Log(name, mess) VALUES (?,?)", array( "photoarch_server", $mess ), NFT_DATABASE, NFT_UID, NFT_PWD);
+    return $mess;
+}
 
 
 /// сборка ответа в единообразный json
@@ -84,10 +88,13 @@ function GetResultJSON( $data, $ok, $token ){
 // $bad would be  ["\u20ac","http:\/\/example.com\/some\/cool\/page","337"]
 // $good would be ["€","http://example.com/some/cool/page",337]
 //
+// JSON_HEX_QUOT - Все символы " кодируются в \u0022
+// JSON_UNESCAPED_UNICODE - Не кодировать многобайтовые символы Unicode (по умолчанию они кодируются как \uXXXX)
+// JSON_UNESCAPED_SLASHES - Не экранировать /
     return 
 
     	    '{ "ok": ' . json_encode($ok) . ',' .
-            ' "data": ' . json_encode($data,  JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK) . ',' .
+            ' "data": ' . json_encode($data,  JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_QUOT | JSON_PARTIAL_OUTPUT_ON_ERROR ) . ',' .  // | JSON_NUMERIC_CHECK
             ' "token": "' . $token . '"' .
             '}';
 
@@ -112,7 +119,8 @@ function ClearUp( $input_text ){
 
 	$input_text = trim($input_text);
 	$input_text = strip_tags($input_text);
-	$input_text = htmlspecialchars($input_text);
+//	$input_text = htmlspecialchars_decode($input_text);
+//	$input_text = htmlspecialchars($input_text);
 	return $input_text;
 }
 

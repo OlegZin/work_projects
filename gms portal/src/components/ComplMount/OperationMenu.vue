@@ -35,8 +35,8 @@
           <button @click="onMount"    v-if="(data.State == -1 && data.kzex == 0) || (data.BtdState == 0 && data.State == 0 && data.kzex == 0)">Установлено</button> 
           <button @click="onMountKZ"  v-if="(data.State == -1 && data.kzex == 1) || (data.BtdState == 0 && data.State == 0 && data.kzex == 1)">Установлено</button> 
           <button @click="onUnMount"  :disabled="data.State == 0 || ( data.State == 1 && data.BtdState !== 0 )">Не установлено</button> 
-          <button @click="onEdit"     :disabled="data.State == -1 || ( data.State == 0 && data.BtdState !== 0 ) || ( data.State == 1 && data.BtdState == 0 )">Редактировать</button> 
-          <button @click="onCancelKZ" :disabled="( data.FirstMatId == null || data.FirstMatId == data.CurMatId ) && data.BtdState == 0">Отменить КЗ</button> 
+          <button @click="onEdit"     :disabled="data.State == -1 || ( data.State == 0 && data.BtdState !== 0 ) || ( data.State == 1 && data.BtdState !== 0 )">Редактировать</button> 
+          <button @click="onCancelKZ" :disabled="!(( data.FirstMatId !== null ) && ( data.FirstMatId !== data.CurMatId ) && ( data.BtdState == 0 ))">Отменить КЗ</button> 
           <button @click="onDelete"   :disabled="data.State == -1 || data.BtdState == 1 ">Удалить</button> 
           <button @click="onHistory">История изменений</button> 
           <button @click="onCancel">Отмена</button> 

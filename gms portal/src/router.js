@@ -25,6 +25,16 @@ export default new Router({
       name: 'AdminPanel',
       component: () => import('./views/AdminPanel.vue')
     },
+    {
+      path: '/OTK',
+      name: 'OTK',
+      component: () => import('./views/OTK.vue')
+    },
+    {
+      path: '/PhoneBook',
+      name: 'PhoneBook',
+      component: () => import('./views/PhoneBook.vue')
+    },
 
   ]
 })

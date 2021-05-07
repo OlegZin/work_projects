@@ -114,6 +114,8 @@ export default new Vuex.Store({
           })
           .then(response => {
 
+              console.log(response);
+              
               if ((response.data.ok !== undefined) && response.data.ok) {
                   context.dispatch('setToken', response.data.token);  
                   if (callback) callback(response.data.data);        
@@ -129,9 +131,6 @@ export default new Vuex.Store({
           }); 
 
       },
-
-
-
 
 
       TryPostRequest( context ){

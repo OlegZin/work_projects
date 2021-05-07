@@ -40,6 +40,7 @@ export default {
       onPassChange(){
           this.comfirm = false;
           let context = this;
+
           this.$store.dispatch(
               'ServerRequest', 
               {    

@@ -2,7 +2,7 @@
 	<div>
     	<h4>Удаление позиции</h4>
     	<p>Вы уверены, что хотите удалить позицию: {{data.CurMat}} ?</p>
-		<button @click="onDelete">Отменить КЗ</button>
+		<button @click="onDelete">Удалить</button>
 		<button @click="onCancel">Отмена</button>
 	</div>
 </template>
@@ -15,7 +15,7 @@
             	this.$emit('onCancel');
             },
             onDelete() {
-            	this.$emit('onDelete', this.data);
+            	this.$emit('onSave', this.data);
             }
 		}
 	}
