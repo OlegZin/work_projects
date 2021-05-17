@@ -1,0 +1,64 @@
+object fColorPicker: TfColorPicker
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = Single
+  Caption = #1062#1074#1077#1090
+  ClientHeight = 150
+  ClientWidth = 170
+  Position = Designed
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object rColorPanel: TRectangle
+    Size.Width = 170.000000000000000000
+    Size.Height = 150.000000000000000000
+    Size.PlatformDefault = False
+    object ColorPanel1: TColorPanel
+      Align = Bottom
+      Color = claWhite
+      ColorBox = ColorBox1
+      Position.Y = 24.000000000000000000
+      Size.Width = 170.000000000000000000
+      Size.Height = 126.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      UseAlpha = False
+    end
+    object ColorBox1: TColorBox
+      Color = claWhite
+      Position.X = 6.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 122.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+    end
+    object Button1: TButton
+      StyledSettings = [Family, Size, FontColor]
+      Position.X = 150.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 17.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = #1061
+      TextSettings.Font.Style = [fsBold]
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      StyledSettings = [Size, FontColor]
+      Position.X = 132.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 17.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = #252
+      TextSettings.Font.Family = 'Wingdings'
+      TextSettings.Font.Style = [fsBold]
+      OnClick = Button2Click
+    end
+  end
+end

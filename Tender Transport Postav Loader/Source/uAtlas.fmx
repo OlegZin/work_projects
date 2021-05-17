@@ -1,0 +1,40 @@
+object fAtlas: TfAtlas
+  Left = 0
+  Top = 0
+  Caption = 'fAtlas'
+  ClientHeight = 480
+  ClientWidth = 257
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object lError: TLabel
+    Align = Top
+    AutoSize = True
+    StyledSettings = [Family, Size, Style]
+    Padding.Left = 10.000000000000000000
+    Margins.Bottom = 5.000000000000000000
+    Size.Width = 257.000000000000000000
+    Size.Height = 16.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.FontColor = claCrimson
+    TextSettings.HorzAlign = Center
+    TextSettings.WordWrap = False
+    Text = 'Error'
+  end
+  object lInfo: TLabel
+    Align = Top
+    AutoSize = True
+    StyledSettings = [Family, Size, Style]
+    Padding.Left = 10.000000000000000000
+    Margins.Bottom = 5.000000000000000000
+    Position.Y = 21.000000000000000000
+    Size.Width = 257.000000000000000000
+    Size.Height = 16.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.FontColor = claCornflowerblue
+    TextSettings.HorzAlign = Center
+    TextSettings.WordWrap = False
+    Text = 'Info'
+  end
+end

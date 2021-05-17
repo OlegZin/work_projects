@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.642,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uTextComparer.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.940,=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.829,=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.896,=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.728,=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.114,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uSelect.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.770,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.fmx=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uCitySprav.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.920,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\uDM.pas=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.315,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uColorPicker.pas=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.573,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\TTLoader.dproj=\\ntm.grouphms.local\fs\UserFolders\zinovev\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.747,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.fmx=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uAtlas.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.114,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.fmx=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uSelect.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.315,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uColorPicker.fmx=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.889,=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.494,=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.387,=\\ntm.grouphms.local\fs\UserFolders\zinovev\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.921,=\\ntm.grouphms.local\fs\UserFolders\zinovev\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.236,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\uMain.fmx=\\ntm.grouphms.local\fs\UserFolders\zinovev\Documents\Embarcadero\Studio\Projects\Unit1.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.747,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uAtlas.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.770,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uCitySprav.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.368,=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.420,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Source\uAtlas.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.236,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\uMain.pas=\\ntm.grouphms.local\fs\UserFolders\zinovev\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.920,Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\uDM.dfm=Y:\Тендерная Межгород 2020\Tender Transport Postav Loader\Unit1.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

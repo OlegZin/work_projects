@@ -1,0 +1,109 @@
+object fSelect: TfSelect
+  Left = 0
+  Top = 0
+  Caption = #1042#1099#1073#1086#1088' / '#1089#1086#1087#1086#1089#1090#1072#1074#1083#1077#1085#1080#1077
+  ClientHeight = 313
+  ClientWidth = 486
+  Padding.Left = 10.000000000000000000
+  Padding.Top = 10.000000000000000000
+  Padding.Right = 10.000000000000000000
+  Padding.Bottom = 10.000000000000000000
+  Position = MainFormCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnClose = FormClose
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object ListBox1: TListBox
+    Align = Client
+    Size.Width = 466.000000000000000000
+    Size.Height = 193.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    DisableFocusEffect = True
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    OnChange = ListBox1Change
+    Viewport.Width = 462.000000000000000000
+    Viewport.Height = 189.000000000000000000
+  end
+  object Button1: TButton
+    Align = MostBottom
+    Enabled = False
+    ModalResult = 1
+    Position.X = 10.000000000000000000
+    Position.Y = 281.000000000000000000
+    Size.Width = 466.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Text = #1042#1099#1073#1088#1072#1090#1100
+  end
+  object Panel1: TPanel
+    Align = Top
+    Position.X = 10.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 466.000000000000000000
+    Size.Height = 39.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object lmarshrut: TLabel
+      AutoSize = True
+      StyledSettings = [Family, FontColor]
+      Position.X = 9.000000000000000000
+      Position.Y = 15.000000000000000000
+      Size.Width = 67.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 14.000000000000000000
+      TextSettings.Font.Style = [fsBold]
+      TextSettings.WordWrap = False
+      Text = #1084#1072#1088#1096#1088#1091#1090
+    end
+    object Label1: TLabel
+      AutoSize = True
+      Position.X = 3.000000000000000000
+      Size.Width = 282.000000000000000000
+      Size.Height = 16.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.WordWrap = False
+      Text = #1059#1082#1072#1078#1080#1090#1077' '#1074#1077#1088#1085#1099#1081' '#1085#1072#1089#1077#1083#1077#1085#1085#1099#1081' '#1087#1091#1085#1082#1090' '#1076#1083#1103' '#1084#1072#1088#1096#1088#1091#1090#1072':'
+    end
+  end
+  object Label2: TLabel
+    Align = Bottom
+    Position.X = 10.000000000000000000
+    Position.Y = 264.000000000000000000
+    Size.Width = 466.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 
+      #1085#1077#1090' '#1084#1072#1088#1096#1088#1091#1090#1072' = '#1085#1080' '#1074' '#1086#1076#1085#1086#1081' '#1058#1058' '#1076#1072#1085#1085#1099#1081' '#1085#1072#1089#1077#1083#1077#1085#1085#1099#1081' '#1087#1091#1085#1082#1090' '#1085#1077' '#1091#1087#1086#1084#1080#1085#1072#1083 +
+      #1089#1103
+  end
+  object eFilter: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    Align = Top
+    TabOrder = 3
+    Position.X = 10.000000000000000000
+    Position.Y = 49.000000000000000000
+    Size.Width = 466.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    OnTyping = eFilterTyping
+    object Label3: TLabel
+      Align = Right
+      AutoSize = True
+      StyledSettings = [Family, Size, Style]
+      Position.X = 415.000000000000000000
+      Size.Width = 51.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claDarkgray
+      TextSettings.WordWrap = False
+      Text = '['#1060#1080#1083#1100#1090#1088']'
+    end
+  end
+end

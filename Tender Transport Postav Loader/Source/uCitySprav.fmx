@@ -1,0 +1,84 @@
+object fCitySprav: TfCitySprav
+  Left = 0
+  Top = 0
+  Caption = #1053#1072#1089#1077#1083#1077#1085#1085#1099#1077' '#1087#1091#1085#1082#1090#1099
+  ClientHeight = 490
+  ClientWidth = 559
+  Padding.Left = 10.000000000000000000
+  Padding.Top = 10.000000000000000000
+  Padding.Right = 10.000000000000000000
+  Padding.Bottom = 10.000000000000000000
+  Position = OwnerFormCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Align = Top
+    Padding.Left = 5.000000000000000000
+    Padding.Top = 5.000000000000000000
+    Padding.Right = 5.000000000000000000
+    Padding.Bottom = 5.000000000000000000
+    Position.X = 10.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 539.000000000000000000
+    Size.Height = 63.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Label1: TLabel
+      Align = Client
+      Size.Width = 529.000000000000000000
+      Size.Height = 53.000000000000000000
+      Size.PlatformDefault = False
+      Text = 
+        #1057#1087#1080#1089#1086#1082' '#1085#1072#1089#1077#1083#1077#1085#1085#1099#1093' '#1087#1091#1085#1082#1090#1086#1074', '#1087#1088#1080#1074#1103#1079#1072#1085#1085#1099#1093' '#1082' '#1084#1072#1088#1096#1088#1091#1090#1072#1084' '#1090#1077#1085#1076#1077#1088#1085#1086#1081' '#1090#1072#1073 +
+        #1083#1080#1094#1099'. '#1059#1076#1072#1083#1080#1090#1077' '#1085#1077#1074#1077#1088#1085#1086' '#1086#1087#1088#1077#1076#1077#1083#1077#1085#1085#1099#1081' '#1075#1086#1088#1086#1076', '#1095#1090#1086#1073#1099' '#1091#1076#1072#1083#1080#1090#1100' '#1084#1072#1088#1096#1088#1091#1090'.' +
+        ' '#1042#1053#1048#1052#1040#1053#1048#1045'! '#1076#1072#1085#1085#1099#1077', '#1079#1072#1075#1088#1091#1078#1077#1085#1085#1099#1077' '#1087#1086' '#1091#1076#1072#1083#1103#1077#1084#1086#1084#1091' '#1084#1072#1088#1096#1088#1091#1090#1091' '#1090#1072#1082' '#1078#1077' '#1073#1091#1076 +
+        #1091#1090' '#1091#1076#1072#1083#1077#1085#1099'!'
+    end
+  end
+  object Panel2: TPanel
+    Align = Bottom
+    Position.X = 10.000000000000000000
+    Position.Y = 440.000000000000000000
+    Size.Width = 539.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Button1: TButton
+      Anchors = [akTop, akRight]
+      ModalResult = 1
+      Position.X = 417.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 112.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = #1047#1072#1082#1088#1099#1090#1100
+    end
+    object Button2: TButton
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 112.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = #1059#1076#1072#1083#1080#1090#1100
+      OnClick = Button2Click
+    end
+  end
+  object ListBox1: TListBox
+    Align = Client
+    Size.Width = 539.000000000000000000
+    Size.Height = 367.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    DisableFocusEffect = True
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    Viewport.Width = 535.000000000000000000
+    Viewport.Height = 363.000000000000000000
+  end
+end
